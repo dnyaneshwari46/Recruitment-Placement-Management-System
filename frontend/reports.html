@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports Management | Recruitment Placement System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+        /* Sidebar */
+        
+        .sidebar {
+            width: 245px;
+            background: #172554;
+            color: white;
+            padding: 24px 16px;
+            flex-shrink: 0;
+        }
+        
+        .brand {
+            font-size: 19px;
+            font-weight: bold;
+            line-height: 1.5;
+            padding: 0 10px 25px;
+            border-bottom: 1px solid #33446f;
+        }
+        
+        .brand span {
+            display: block;
+            font-size: 12px;
+            color: #bfdbfe;
+            font-weight: normal;
+        }
+        
+        .nav-title {
+            margin: 25px 10px 10px;
+            color: #94a3b8;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+        
+        .nav a {
+            display: block;
+            color: #dbeafe;
+            text-decoration: none;
+            padding: 12px 14px;
+            margin: 5px 0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .nav a:hover {
+            background: #263b63;
+        }
+        
+        .nav a.active {
+            background: #2563eb;
+            color: white;
+        }
+        
+        .logout {
+            display: block;
+            margin: 30px 5px 0;
+            padding: 12px;
+            text-align: center;
+            background: #263b63;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+        /* Main content */
+        
+        .main {
+            flex: 1;
+            min-width: 0;
+            padding: 28px;
+        }
+        
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .topbar h1 {
+            margin: 0;
+            font-size: 25px;
+            color: #172554;
+        }
+        
+        .breadcrumb {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #64748b;
+        }
+        
+        .user-info {
+            color: #64748b;
+            font-size: 13px;
+        }
+        
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 5px rgba(15, 23, 42, 0.04);
+        }
+        
+        .card-header {
+            margin-bottom: 20px;
+        }
+        
+        .card-header h2 {
+            margin: 0;
+            font-size: 19px;
+            color: #172554;
+        }
+        
+        .card-header p {
+            margin: 8px 0 0;
+            font-size: 13px;
+            color: #64748b;
+            line-height: 1.6;
+        }
+        /* Report list */
+        
+        .report-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+        
+        .report-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 18px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .report-item:hover {
+            border-color: #93c5fd;
+            box-shadow: 0 3px 10px rgba(37, 99, 235, 0.07);
+        }
+        
+        .report-info {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            min-width: 0;
+        }
+        
+        .report-number {
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 7px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .report-name {
+            font-weight: bold;
+            color: #334155;
+            font-size: 14px;
+        }
+        
+        .report-description {
+            color: #94a3b8;
+            font-size: 11px;
+            margin-top: 5px;
+        }
+        
+        button {
+            padding: 10px 15px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        
+        button:hover {
+            background: #1d4ed8;
+        }
+        
+        button:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+        
+        .message {
+            display: none;
+            margin-top: 20px;
+            padding: 12px 15px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+        
+        .message.success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .message.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .message.info {
+            display: block;
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .footer {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+            padding: 15px;
+        }
+        
+        @media (max-width: 900px) {
+            .sidebar {
+                width: 200px;
+            }
+            .main {
+                padding: 20px;
+            }
+            .report-list {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 650px) {
+            .layout {
+                display: block;
+            }
+            .sidebar {
+                width: 100%;
+                padding: 15px;
+            }
+            .nav {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+            .nav-title {
+                margin-top: 15px;
+            }
+            .nav a {
+                padding: 9px;
+                font-size: 12px;
+            }
+            .logout {
+                margin-top: 15px;
+            }
+            .main {
+                padding: 15px;
+            }
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+            .card {
+                padding: 17px;
+            }
+            .report-item {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+            .report-item button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <aside class="sidebar">
+
+            <div class="brand">
+                RPMS
+                <span>Recruitment & Placement System</span>
+            </div>
+
+            <div class="nav-title">Main Menu</div>
+
+            <nav class="nav">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="candidates.html">Candidates</a>
+                <a href="companies.html">Companies</a>
+                <a href="jobs.html">Jobs</a>
+                <a href="applications.html">Applications</a>
+                <a href="interviews.html">Interviews</a>
+                <a href="offers.html">Offers</a>
+                <a href="placements.html">Placements</a>
+                <a href="feedback.html">Interview Feedback</a>
+                <a href="eligibility.html">Eligibility</a>
+                <a href="reports.html" class="active">Reports</a>
+            </nav>
+
+            <a href="index.html" class="logout">Logout</a>
+
+        </aside>
+
+        <main class="main">
+
+            <div class="topbar">
+                <div>
+                    <h1>Reports Management</h1>
+                    <div class="breadcrumb">
+                        Dashboard / Reports
+                    </div>
+                </div>
+
+                <div class="user-info">
+                    Administrator
+                </div>
+            </div>
+
+            <section class="card">
+
+                <div class="card-header">
+                    <h2>Generate Reports</h2>
+                    <p>
+                        Select a report below to generate and download the corresponding recruitment and placement data.
+                    </p>
+                </div>
+
+                <div class="report-list">
+
+                    <div class="report-item">
+                        <div class="report-info">
+                            <div class="report-number">01</div>
+                            <div>
+                                <div class="report-name">Candidate Report</div>
+                                <div class="report-description">Candidate records and details</div>
+                            </div>
+                        </div>
+                        <button onclick="downloadReport('candidate', this)">Download</button>
+                    </div>
+
+                    <div class="report-item">
+                        <div class="report-info">
+                            <div class="report-number">02</div>
+                            <div>
+                                <div class="report-name">Company Report</div>
+                                <div class="report-description">Registered company details</div>
+                            </div>
+                        </div>
+                        <button onclick="downloadReport('company', this)">Download</button>
+                    </div>
+
+                    <div class="report-item">
+                        <div class="report-info">
+                            <div class="report-number">03</div>
+                            <div>
+                                <div class="report-name">Job Report</div>
+                                <div class="report-description">Available job openings</div>
+                            </div>
+                        </div>
+                        <button onclick="downloadReport('job', this)">Download</button>
+                    </div>
+
+                    <div class="report-item">
+                        <div class="report-info">
+                            <div class="report-number">04</div>
+                            <div>
+                                <div class="report-name">Application Report</div>
+                                <div class="report-description">Candidate job applications</div>
+                            </div>
+                        </div>
+                        <button onclick="downloadReport('application', this)">Download</button>
+                    </div>
+
+                    <div class="report-item">
+                        <div class="report-info">
+                            <div class="report-number">05</div>
+                            <div>
+                                <div class="report-name">Interview Report</div>
+                                <div class="report-description">Scheduled interview records</div>
+                            </div>
+                        </div>
+                        <button onclick="downloadReport('interview', this)">Download</button>
+                    </div>
+
+                    <div class="report-item">
+                        <div class="report-info">
+                            <div class="report-number">06</div>
+                            <div>
+                                <div class="report-name">Offer Report</div>
+                                <div class="report-description">Candidate offer details</div>
+                            </div>
+                        </div>
+                        <button onclick="downloadReport('offer', this)">Download</button>
+                    </div>
+
+                    <div class="report-item">
+                        <div class="report-info">
+                            <div class="report-number">07</div>
+                            <div>
+                                <div class="report-name">Placement Report</div>
+                                <div class="report-description">Candidate placement records</div>
+                            </div>
+                        </div>
+                        <button onclick="downloadReport('placement', this)">Download</button>
+                    </div>
+
+                </div>
+
+                <div id="message" class="message"></div>
+
+            </section>
+
+            <div class="footer">
+                Recruitment & Placement Management System
+            </div>
+
+        </main>
+
+    </div>
+
+    <script>
+        function showMessage(text, type) {
+
+            const message = document.getElementById("message");
+
+            message.textContent = text;
+            message.className = "message " + type;
+        }
+
+        // Download report
+        async function downloadReport(type, button) {
+
+            button.disabled = true;
+            button.textContent = "Generating...";
+
+            showMessage("Please wait, generating report...", "info");
+
+            try {
+
+                const response = await fetch(
+                    "/api/reports?type=" + encodeURIComponent(type)
+                );
+
+                if (!response.ok) {
+
+                    let errorMessage = "Report download failed.";
+
+                    try {
+                        const error = await response.json();
+                        errorMessage = error.message || errorMessage;
+                    } catch (e) {
+                        // Keep the default error message.
+                    }
+
+                    throw new Error(errorMessage);
+                }
+
+                const blob = await response.blob();
+
+                const url = window.URL.createObjectURL(blob);
+
+                const link = document.createElement("a");
+
+                link.href = url;
+                link.download = type.toUpperCase() + "_REPORT.txt";
+
+                document.body.appendChild(link);
+                link.click();
+
+                link.remove();
+
+                window.URL.revokeObjectURL(url);
+
+                showMessage(
+                    type.charAt(0).toUpperCase() + type.slice(1) +
+                    " report downloaded successfully!",
+                    "success"
+                );
+
+            } catch (error) {
+
+                showMessage("Error: " + error.message, "error");
+
+            } finally {
+
+                button.disabled = false;
+                button.textContent = "Download";
+            }
+        }
+    </script>
+
+</body>
+
+</html>

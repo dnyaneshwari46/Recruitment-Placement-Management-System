@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eligibility Checking | Recruitment Placement System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+        /* Sidebar */
+        
+        .sidebar {
+            width: 245px;
+            background: #172554;
+            color: white;
+            padding: 24px 16px;
+            flex-shrink: 0;
+        }
+        
+        .brand {
+            font-size: 19px;
+            font-weight: bold;
+            line-height: 1.5;
+            padding: 0 10px 25px;
+            border-bottom: 1px solid #33446f;
+        }
+        
+        .brand span {
+            display: block;
+            font-size: 12px;
+            color: #bfdbfe;
+            font-weight: normal;
+        }
+        
+        .nav-title {
+            margin: 25px 10px 10px;
+            color: #94a3b8;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+        
+        .nav a {
+            display: block;
+            color: #dbeafe;
+            text-decoration: none;
+            padding: 12px 14px;
+            margin: 5px 0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .nav a:hover {
+            background: #263b63;
+        }
+        
+        .nav a.active {
+            background: #2563eb;
+            color: white;
+        }
+        
+        .logout {
+            display: block;
+            margin: 30px 5px 0;
+            padding: 12px;
+            text-align: center;
+            background: #263b63;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+        /* Main content */
+        
+        .main {
+            flex: 1;
+            min-width: 0;
+            padding: 28px;
+        }
+        
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .topbar h1 {
+            margin: 0;
+            font-size: 25px;
+            color: #172554;
+        }
+        
+        .breadcrumb {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #64748b;
+        }
+        
+        .user-info {
+            color: #64748b;
+            font-size: 13px;
+        }
+        
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 5px rgba(15, 23, 42, 0.04);
+            max-width: 850px;
+        }
+        
+        .card h2 {
+            margin: 0;
+            font-size: 19px;
+            color: #172554;
+        }
+        
+        .description {
+            margin: 8px 0 22px;
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #334155;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .helper {
+            display: block;
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 7px;
+        }
+        
+        .primary-btn {
+            margin-top: 20px;
+            padding: 12px 20px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .primary-btn:hover {
+            background: #1d4ed8;
+        }
+        
+        .primary-btn:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+        /* Result */
+        
+        #result {
+            display: none;
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid transparent;
+        }
+        
+        #result.eligible {
+            display: block;
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+            color: #166534;
+        }
+        
+        #result.not-eligible {
+            display: block;
+            background: #fef2f2;
+            border-color: #fecaca;
+            color: #991b1b;
+        }
+        
+        #result.error {
+            display: block;
+            background: #fffbeb;
+            border-color: #fde68a;
+            color: #92400e;
+        }
+        
+        #result.info {
+            display: block;
+            background: #eff6ff;
+            border-color: #bfdbfe;
+            color: #1e40af;
+        }
+        
+        #status {
+            font-size: 17px;
+            font-weight: bold;
+            margin: 0 0 10px;
+        }
+        
+        #reason {
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        .footer {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+            padding: 15px;
+        }
+        
+        @media (max-width: 900px) {
+            .sidebar {
+                width: 200px;
+            }
+            .main {
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 650px) {
+            .layout {
+                display: block;
+            }
+            .sidebar {
+                width: 100%;
+                padding: 15px;
+            }
+            .nav {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+            .nav-title {
+                margin-top: 15px;
+            }
+            .nav a {
+                padding: 9px;
+                font-size: 12px;
+            }
+            .logout {
+                margin-top: 15px;
+            }
+            .main {
+                padding: 15px;
+            }
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+            .card {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <aside class="sidebar">
+
+            <div class="brand">
+                RPMS
+                <span>Recruitment & Placement System</span>
+            </div>
+
+            <div class="nav-title">Main Menu</div>
+
+            <nav class="nav">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="candidates.html">Candidates</a>
+                <a href="companies.html">Companies</a>
+                <a href="jobs.html">Jobs</a>
+                <a href="applications.html">Applications</a>
+                <a href="interviews.html">Interviews</a>
+                <a href="offers.html">Offers</a>
+                <a href="placements.html">Placements</a>
+                <a href="feedback.html">Interview Feedback</a>
+                <a href="eligibility.html" class="active">Eligibility</a>
+                <a href="reports.html">Reports</a>
+            </nav>
+
+            <a href="index.html" class="logout">Logout</a>
+
+        </aside>
+
+        <main class="main">
+
+            <div class="topbar">
+                <div>
+                    <h1>Eligibility Checking</h1>
+                    <div class="breadcrumb">
+                        Dashboard / Eligibility Checking
+                    </div>
+                </div>
+
+                <div class="user-info">
+                    Administrator
+                </div>
+            </div>
+
+            <section class="card">
+
+                <h2>Check Candidate Eligibility</h2>
+
+                <p class="description">
+                    Enter an application ID to check whether the candidate satisfies the eligibility criteria for the applied job.
+                </p>
+
+                <form id="eligibilityForm">
+
+                    <label for="applicationId">Application ID *</label>
+
+                    <input type="number" id="applicationId" min="1" placeholder="Enter Application ID" required>
+
+                    <span class="helper">
+                    Enter the application ID available in Application Management.
+                </span>
+
+                    <button type="submit" id="checkButton" class="primary-btn">
+                    Check Eligibility
+                </button>
+
+                </form>
+
+                <div id="result">
+
+                    <p id="status"></p>
+
+                    <p id="reason"></p>
+
+                </div>
+
+            </section>
+
+            <div class="footer">
+                Recruitment & Placement Management System
+            </div>
+
+        </main>
+
+    </div>
+
+    <script>
+        const form = document.getElementById("eligibilityForm");
+
+        const resultBox = document.getElementById("result");
+
+        const statusText = document.getElementById("status");
+
+        const reasonText = document.getElementById("reason");
+
+        const checkButton = document.getElementById("checkButton");
+
+        // Show result message
+        function showResult(message, status, type) {
+
+            resultBox.className = type;
+
+            resultBox.style.display = "block";
+
+            statusText.textContent = status;
+
+            reasonText.textContent = message;
+        }
+
+        // Check eligibility
+        form.addEventListener("submit", async function(event) {
+
+            event.preventDefault();
+
+            const applicationId =
+                document.getElementById("applicationId").value.trim();
+
+            if (!applicationId || Number(applicationId) <= 0) {
+
+                showResult(
+                    "Please enter a valid Application ID.",
+                    "Invalid Application ID",
+                    "error"
+                );
+
+                return;
+            }
+
+            checkButton.disabled = true;
+
+            checkButton.textContent = "Checking...";
+
+            showResult(
+                "Please wait while the system checks eligibility.",
+                "Checking Eligibility",
+                "info"
+            );
+
+            try {
+
+                const response = await fetch(
+                    "/api/eligibility?applicationId=" +
+                    encodeURIComponent(applicationId)
+                );
+
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+
+                    showResult(
+                        data.message || "Unable to check eligibility.",
+                        "Eligibility Check Failed",
+                        "error"
+                    );
+
+                    return;
+                }
+
+                if (data.status === "ELIGIBLE") {
+
+                    showResult(
+                        "Reason: " + data.reason,
+                        "Candidate is ELIGIBLE",
+                        "eligible"
+                    );
+
+                } else if (data.status === "NOT_ELIGIBLE") {
+
+                    showResult(
+                        "Reason: " + data.reason,
+                        "Candidate is NOT ELIGIBLE",
+                        "not-eligible"
+                    );
+
+                } else {
+
+                    showResult(
+                        data.reason || "No eligibility result is available.",
+                        "Eligibility Status: " + data.status,
+                        "error"
+                    );
+                }
+
+            } catch (error) {
+
+                showResult(
+                    "Could not connect to the server. Please check whether the Java server is running.",
+                    "Connection Error",
+                    "error"
+                );
+
+            } finally {
+
+                checkButton.disabled = false;
+
+                checkButton.textContent = "Check Eligibility";
+            }
+
+        });
+    </script>
+
+</body>
+
+</html>

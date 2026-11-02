@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recruitment & Placement System</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        
+        body {
+            background: #f4f6fb;
+            color: #263248;
+        }
+        
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+        /* Sidebar */
+        
+        .sidebar {
+            width: 250px;
+            background: #172554;
+            color: white;
+            padding: 25px 15px;
+            flex-shrink: 0;
+        }
+        
+        .logo {
+            font-size: 21px;
+            font-weight: bold;
+            padding: 5px 12px 30px;
+            line-height: 1.5;
+        }
+        
+        .logo span {
+            color: #60a5fa;
+        }
+        
+        .menu-title {
+            color: #94a3b8;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            padding: 15px 12px;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 14px;
+            margin: 5px 0;
+            border-radius: 9px;
+            color: #dbeafe;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        
+        .nav-link:hover,
+        .nav-link.active {
+            background: #2563eb;
+            color: white;
+            transform: translateX(3px);
+        }
+        
+        .nav-icon {
+            font-size: 19px;
+            width: 23px;
+            text-align: center;
+        }
+        /* Main content */
+        
+        .main {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .topbar {
+            background: white;
+            padding: 20px 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+        }
+        
+        .topbar h2 {
+            color: #172554;
+            font-size: 21px;
+        }
+        
+        .admin {
+            background: #eff6ff;
+            color: #1d4ed8;
+            padding: 10px 17px;
+            border-radius: 25px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        .content {
+            padding: 30px 35px;
+        }
+        /* Welcome section */
+        
+        .welcome {
+            background: linear-gradient(120deg, #1e40af, #3b82f6);
+            padding: 30px;
+            border-radius: 15px;
+            color: white;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.18);
+        }
+        
+        .welcome h1 {
+            font-size: 27px;
+            margin-bottom: 10px;
+        }
+        
+        .welcome p {
+            color: #dbeafe;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .section-heading {
+            margin-bottom: 20px;
+        }
+        
+        .section-heading h2 {
+            color: #172554;
+            font-size: 21px;
+            margin-bottom: 6px;
+        }
+        
+        .section-heading p {
+            color: #64748b;
+            font-size: 13px;
+        }
+        /* Cards */
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 20px;
+        }
+        
+        .card {
+            background: white;
+            padding: 23px;
+            border-radius: 13px;
+            border: 1px solid #e8edf5;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+            transition: 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.09);
+            border-color: #bfdbfe;
+        }
+        
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 18px;
+        }
+        
+        .blue {
+            background: #dbeafe;
+        }
+        
+        .purple {
+            background: #ede9fe;
+        }
+        
+        .green {
+            background: #dcfce7;
+        }
+        
+        .orange {
+            background: #ffedd5;
+        }
+        
+        .pink {
+            background: #fce7f3;
+        }
+        
+        .cyan {
+            background: #cffafe;
+        }
+        
+        .card h3 {
+            color: #1e293b;
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+        
+        .card p {
+            color: #94a3b8;
+            font-size: 12px;
+            margin-bottom: 18px;
+        }
+        
+        .card button {
+            background: #eff6ff;
+            color: #2563eb;
+            border: none;
+            padding: 9px 17px;
+            border-radius: 7px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .card button:hover {
+            background: #2563eb;
+            color: white;
+        }
+        /* Footer */
+        
+        .footer {
+            text-align: center;
+            padding: 25px;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+        
+        .logout {
+            width: 100%;
+            margin-top: 25px;
+            background: #991b1b;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .logout:hover {
+            background: #dc2626;
+        }
+        
+        @media (max-width: 800px) {
+            .layout {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+            }
+            .sidebar nav {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 5px;
+            }
+            .menu-title {
+                display: none;
+            }
+            .content {
+                padding: 20px;
+            }
+            .topbar {
+                padding: 18px 20px;
+            }
+        }
+        
+        @media (max-width: 450px) {
+            .sidebar nav {
+                grid-template-columns: 1fr;
+            }
+            .welcome h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <div class="logo">
+                RPMS <span>●</span><br>
+                <small style="font-size:12px;color:#94a3b8;font-weight:normal;">
+                Recruitment System
+            </small>
+            </div>
+
+            <div class="menu-title">MAIN MENU</div>
+
+            <nav>
+                <a href="dashboard.html" class="nav-link active">
+                    <span class="nav-icon">⌂</span> Dashboard
+                </a>
+
+                <a href="candidates.html" class="nav-link">
+                    <span class="nav-icon">👥</span> Candidates
+                </a>
+
+                <a href="companies.html" class="nav-link">
+                    <span class="nav-icon">🏢</span> Companies
+                </a>
+
+                <a href="jobs.html" class="nav-link">
+                    <span class="nav-icon">💼</span> Jobs
+                </a>
+
+                <a href="applications.html" class="nav-link">
+                    <span class="nav-icon">📄</span> Applications
+                </a>
+
+                <a href="interviews.html" class="nav-link">
+                    <span class="nav-icon">🗓️</span> Interviews
+                </a>
+
+                <a href="offers.html" class="nav-link">
+                    <span class="nav-icon">🎁</span> Offers
+                </a>
+
+                <a href="placements.html" class="nav-link">
+                    <span class="nav-icon">🎓</span> Placements
+                </a>
+
+                <a href="feedback.html" class="nav-link">
+                    <span class="nav-icon">⭐</span> Interview Feedback
+                </a>
+
+                <a href="eligibility.html" class="nav-link">
+                    <span class="nav-icon">✅</span> Eligibility
+                </a>
+
+                <a href="reports.html" class="nav-link">
+                    <span class="nav-icon">📊</span> Reports
+                </a>
+            </nav>
+
+            <button class="logout" onclick="logout()">
+            ↪ Logout
+        </button>
+
+        </aside>
+
+        <!-- Main content -->
+        <main class="main">
+
+            <header class="topbar">
+                <h2>Dashboard</h2>
+                <div class="admin">👤 Administrator</div>
+            </header>
+
+            <div class="content">
+
+                <section class="welcome">
+                    <h1>Welcome Back, Admin! 👋</h1>
+                    <p>
+                        Manage candidates, companies, job opportunities, interviews and placements from one place.
+                    </p>
+                </section>
+
+                <div class="section-heading">
+                    <h2>Management Modules</h2>
+                    <p>Select a module to manage your recruitment activities.</p>
+                </div>
+
+                <section class="dashboard">
+
+                    <div class="card">
+                        <div class="card-icon blue">👥</div>
+                        <h3>Candidate Management</h3>
+                        <p>Manage candidate records and details.</p>
+                        <button onclick="openPage('candidates.html')">Open Module →</button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon purple">🏢</div>
+                        <h3>Company Management</h3>
+                        <p>Manage registered companies.</p>
+                        <button onclick="openPage('companies.html')">Open Module →</button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon green">💼</div>
+                        <h3>Job Management</h3>
+                        <p>Manage job opportunities and vacancies.</p>
+                        <button onclick="openPage('jobs.html')">Open Module →</button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon orange">📄</div>
+                        <h3>Application Management</h3>
+                        <p>Track candidate job applications.</p>
+                        <button onclick="openPage('applications.html')">Open Module →</button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon cyan">🗓️</div>
+                        <h3>Interview Management</h3>
+                        <p>Schedule and manage interviews.</p>
+                        <button onclick="openPage('interviews.html')">Open Module →</button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon pink">🎁</div>
+                        <h3>Offer Management</h3>
+                        <p>Manage candidate job offers.</p>
+                        <button onclick="openPage('offers.html')">Open Module →</button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon green">🎓</div>
+                        <h3>Placement Management</h3>
+                        <p>Track successful candidate placements.</p>
+                        <button onclick="openPage('placements.html')">Open Module →</button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon purple">⭐</div>
+                        <h3>Interview Feedback</h3>
+                        <p>Review interview performance and feedback.</p>
+                        <button onclick="openPage('feedback.html')">Open Module →</button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon orange">✅</div>
+                        <h3>Eligibility Checking</h3>
+                        <p>Check candidate placement eligibility.</p>
+                        <button onclick="openPage('eligibility.html')">Open Module →</button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon blue">📊</div>
+                        <h3>Reports Management</h3>
+                        <p>Generate and download system reports.</p>
+                        <button onclick="openPage('reports.html')">Open Module →</button>
+                    </div>
+
+                </section>
+
+            </div>
+
+            <footer class="footer">
+                © 2026 Recruitment & Placement Management System
+            </footer>
+
+        </main>
+
+    </div>
+
+    <script>
+        function openPage(page) {
+            window.location.href = page;
+        }
+
+        function logout() {
+            window.location.href = "index.html";
+        }
+    </script>
+
+</body>
+
+</html>

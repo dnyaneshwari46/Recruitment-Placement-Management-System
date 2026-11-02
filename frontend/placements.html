@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placement Management | RPMS</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            background: #f4f7fb;
+            color: #1e293b;
+        }
+        
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+        /* Sidebar */
+        
+        .sidebar {
+            width: 245px;
+            background: #172554;
+            color: white;
+            padding: 25px 15px;
+            flex-shrink: 0;
+        }
+        
+        .brand {
+            font-size: 19px;
+            font-weight: bold;
+            padding: 5px 10px 25px;
+            line-height: 1.5;
+        }
+        
+        .brand span {
+            display: block;
+            color: #93c5fd;
+            font-size: 12px;
+            font-weight: normal;
+        }
+        
+        .nav a {
+            display: block;
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 12px 14px;
+            margin: 5px 0;
+            border-radius: 7px;
+            font-size: 14px;
+        }
+        
+        .nav a:hover,
+        .nav a.active {
+            background: #2563eb;
+            color: white;
+        }
+        /* Main content */
+        
+        .main {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .topbar {
+            height: 70px;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .topbar h3 {
+            margin: 0;
+            color: #172554;
+        }
+        
+        .admin {
+            background: #eff6ff;
+            color: #1d4ed8;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+        
+        .content {
+            padding: 30px;
+            max-width: 1450px;
+            margin: auto;
+        }
+        
+        .page-heading {
+            margin-bottom: 25px;
+        }
+        
+        .page-heading h1 {
+            margin: 0 0 8px;
+            color: #172554;
+            font-size: 27px;
+        }
+        
+        .page-heading p {
+            margin: 0;
+            color: #64748b;
+            font-size: 14px;
+        }
+        
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+        }
+        
+        .card-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .card-heading h2 {
+            margin: 0;
+            color: #172554;
+            font-size: 19px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px 22px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: bold;
+            color: #334155;
+        }
+        
+        input,
+        select {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            background: white;
+            font-size: 14px;
+            outline: none;
+        }
+        
+        input:focus,
+        select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .actions {
+            margin-top: 22px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            border: none;
+            border-radius: 6px;
+            padding: 11px 18px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .primary-btn {
+            background: #2563eb;
+            color: white;
+        }
+        
+        .primary-btn:hover:not(:disabled) {
+            background: #1d4ed8;
+        }
+        
+        .secondary-btn {
+            background: white;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+        }
+        
+        .secondary-btn:hover {
+            background: #f1f5f9;
+        }
+        
+        .message {
+            display: none;
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .message.success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .message.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1100px;
+        }
+        
+        th,
+        td {
+            padding: 13px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+        
+        th {
+            background: #f1f5f9;
+            color: #334155;
+            font-weight: bold;
+        }
+        
+        tbody tr:nth-child(even) {
+            background: #fafcff;
+        }
+        
+        tbody tr:hover {
+            background: #eff6ff;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .status-active,
+        .status-joined {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-cancelled,
+        .status-not-joined,
+        .status-no-show {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .status-pending,
+        .status-deferred {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .empty {
+            text-align: center;
+            color: #64748b;
+            padding: 25px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+            font-size: 12px;
+        }
+        
+        @media (max-width: 800px) {
+            .sidebar {
+                width: 190px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .layout {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                padding: 15px;
+            }
+            .brand {
+                padding-bottom: 12px;
+            }
+            .nav {
+                display: flex;
+                overflow-x: auto;
+                gap: 5px;
+            }
+            .nav a {
+                white-space: nowrap;
+                margin: 0;
+            }
+            .topbar {
+                padding: 0 15px;
+            }
+            .content {
+                padding: 15px;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .card {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <aside class="sidebar">
+
+            <div class="brand">
+                RPMS
+                <span>Recruitment Placement System</span>
+            </div>
+
+            <nav class="nav">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="candidates.html">Candidates</a>
+                <a href="companies.html">Companies</a>
+                <a href="jobs.html">Jobs</a>
+                <a href="applications.html">Applications</a>
+                <a href="interviews.html">Interviews</a>
+                <a href="offers.html">Offers</a>
+                <a href="placements.html" class="active">Placements</a>
+                <a href="feedback.html">Feedback</a>
+                <a href="eligibility.html">Eligibility</a>
+                <a href="reports.html">Reports</a>
+                <a href="index.html" onclick="logout()">Logout</a>
+            </nav>
+
+        </aside>
+
+        <main class="main">
+
+            <header class="topbar">
+                <h3>Placement Management</h3>
+                <span class="admin">Administrator</span>
+            </header>
+
+            <div class="content">
+
+                <div class="page-heading">
+                    <h1>Placement Management</h1>
+                    <p>Dashboard / Placements / Manage Placements</p>
+                </div>
+
+                <section class="card">
+
+                    <div class="card-heading">
+                        <h2>Add New Placement</h2>
+                    </div>
+
+                    <form id="placementForm">
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label for="candidateId">Candidate</label>
+                                <select id="candidateId" required>
+                                <option value="">Loading Candidates...</option>
+                            </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="companyId">Company</label>
+                                <select id="companyId" required>
+                                <option value="">Loading Companies...</option>
+                            </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="jobId">Job</label>
+                                <select id="jobId" required>
+                                <option value="">Loading Jobs...</option>
+                            </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="offerId">Offer</label>
+                                <select id="offerId" required>
+                                <option value="">Loading Offers...</option>
+                            </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="designation">Designation</label>
+                                <input type="text" id="designation" placeholder="Enter designation" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="package">Final Package (LPA)</label>
+                                <input type="number" id="package" step="0.01" min="0" placeholder="Enter package" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="expectedDate">Expected Joining Date</label>
+                                <input type="date" id="expectedDate" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="actualDate">Actual Joining Date</label>
+                                <input type="date" id="actualDate">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="joiningStatus">Joining Status</label>
+                                <select id="joiningStatus" required>
+                                <option value="">Select Status</option>
+                                <option value="PENDING">Pending</option>
+                                <option value="JOINED">Joined</option>
+                                <option value="NOT_JOINED">Not Joined</option>
+                                <option value="DEFERRED">Deferred</option>
+                                <option value="NO_SHOW">No Show</option>
+                            </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="placementStatus">Placement Status</label>
+                                <select id="placementStatus" required>
+                                <option value="">Select Status</option>
+                                <option value="ACTIVE">Active</option>
+                                <option value="CANCELLED">Cancelled</option>
+                            </select>
+                            </div>
+
+                        </div>
+
+                        <div class="actions">
+                            <button type="submit" class="primary-btn" id="submitBtn">
+                            Add Placement
+                        </button>
+
+                            <button type="reset" class="secondary-btn">
+                            Clear Form
+                        </button>
+                        </div>
+
+                    </form>
+
+                    <p id="message" class="message"></p>
+
+                </section>
+
+                <section class="card">
+
+                    <div class="card-heading">
+                        <h2>Placement Records</h2>
+
+                        <button type="button" class="secondary-btn" onclick="loadPlacements()">
+                        Refresh
+                    </button>
+                    </div>
+
+                    <div class="table-wrapper">
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Candidate ID</th>
+                                    <th>Company ID</th>
+                                    <th>Job ID</th>
+                                    <th>Offer ID</th>
+                                    <th>Designation</th>
+                                    <th>Package (LPA)</th>
+                                    <th>Expected Date</th>
+                                    <th>Actual Date</th>
+                                    <th>Joining Status</th>
+                                    <th>Placement Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="placementTable">
+                                <tr>
+                                    <td colspan="11" class="empty">Loading placements...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+            <footer>
+                Recruitment and Placement Management System
+            </footer>
+
+        </main>
+
+    </div>
+
+    <script>
+        function logout() {
+            sessionStorage.clear();
+        }
+
+        function showMessage(message, type) {
+            const messageBox = document.getElementById("message");
+            messageBox.textContent = message;
+            messageBox.className = "message " + type;
+        }
+
+
+        // Load individual dropdowns
+
+        async function loadDropdown(url, elementId, idKeys, nameKeys) {
+
+            const select = document.getElementById(elementId);
+
+            try {
+
+                const response = await fetch(url);
+
+                if (!response.ok) {
+                    throw new Error("Unable to load " + elementId);
+                }
+
+                const records = await response.json();
+
+                select.innerHTML = '<option value="">Select</option>';
+
+                records.forEach(function(record) {
+
+                    let id = null;
+                    let name = null;
+
+                    for (let key of idKeys) {
+                        if (record[key] !== undefined) {
+                            id = record[key];
+                            break;
+                        }
+                    }
+
+                    for (let key of nameKeys) {
+                        if (record[key] !== undefined) {
+                            name = record[key];
+                            break;
+                        }
+                    }
+
+                    if (id !== null) {
+
+                        const option = document.createElement("option");
+
+                        option.value = id;
+                        option.textContent = id + " - " + (name || "Record");
+
+                        select.appendChild(option);
+                    }
+
+                });
+
+            } catch (error) {
+
+                select.innerHTML = '<option value="">Unable to load</option>';
+                showMessage("Error loading " + elementId + ": " + error.message, "error");
+                console.error(error);
+            }
+        }
+
+
+        // Load all dropdowns and remove used offers
+
+        async function loadAllDropdowns() {
+
+            await Promise.all([
+
+                loadDropdown(
+                    "/api/candidates",
+                    "candidateId", ["candidateId", "candidate_id"], ["candidateName", "name", "fullName"]
+                ),
+
+                loadDropdown(
+                    "/api/companies",
+                    "companyId", ["companyId", "company_id"], ["companyName", "name"]
+                ),
+
+                loadDropdown(
+                    "/api/jobs",
+                    "jobId", ["jobId", "job_id"], ["jobTitle", "title", "designation"]
+                )
+
+            ]);
+
+            const offerSelect = document.getElementById("offerId");
+
+            try {
+
+                const offerResponse = await fetch("/api/offers");
+                const placementResponse = await fetch("/api/placements");
+
+                if (!offerResponse.ok || !placementResponse.ok) {
+                    throw new Error("Unable to load offers");
+                }
+
+                const offers = await offerResponse.json();
+                const placements = await placementResponse.json();
+
+                const usedOfferIds = placements.map(function(p) {
+                    return Number(p.offerId);
+                });
+
+                offerSelect.innerHTML =
+                    '<option value="">Select Offer</option>';
+
+                offers.forEach(function(offer) {
+
+                    const offerId = Number(offer.offerId);
+
+                    if (!usedOfferIds.includes(offerId)) {
+
+                        const option = document.createElement("option");
+
+                        option.value = offerId;
+                        option.textContent =
+                            offerId + " - " + (offer.designation || "Offer");
+
+                        offerSelect.appendChild(option);
+                    }
+
+                });
+
+                if (offerSelect.options.length === 1) {
+                    offerSelect.innerHTML =
+                        '<option value="">No available offers</option>';
+                }
+
+            } catch (error) {
+
+                offerSelect.innerHTML =
+                    '<option value="">Unable to load offers</option>';
+
+                showMessage("Error loading offers: " + error.message, "error");
+                console.error(error);
+            }
+        }
+
+
+        // Load placement records
+
+        async function loadPlacements() {
+
+            const table = document.getElementById("placementTable");
+
+            table.innerHTML =
+                '<tr><td colspan="11" class="empty">Loading placements...</td></tr>';
+
+            try {
+
+                const response = await fetch("/api/placements");
+
+                if (!response.ok) {
+                    throw new Error("Unable to fetch placements");
+                }
+
+                const placements = await response.json();
+
+                table.innerHTML = "";
+
+                if (placements.length === 0) {
+
+                    table.innerHTML =
+                        '<tr><td colspan="11" class="empty">No placement records found.</td></tr>';
+
+                    return;
+                }
+
+                placements.forEach(function(p) {
+
+                    const row = document.createElement("tr");
+
+                    const values = [
+                        p.placementId,
+                        p.candidateId,
+                        p.companyId,
+                        p.jobId,
+                        p.offerId,
+                        p.designation,
+                        p.finalPackage,
+                        p.expectedJoiningDate,
+                        p.actualJoiningDate
+                    ];
+
+                    values.forEach(function(value) {
+
+                        const cell = document.createElement("td");
+
+                        cell.textContent =
+                            (value === null || value === undefined) ? "" : value;
+
+                        row.appendChild(cell);
+                    });
+
+                    const joiningCell = document.createElement("td");
+                    const joiningBadge = document.createElement("span");
+                    const joiningStatus = p.joiningStatus || "";
+
+                    joiningBadge.textContent = joiningStatus;
+                    joiningBadge.className = "status";
+
+                    if (joiningStatus === "JOINED") {
+                        joiningBadge.classList.add("status-joined");
+                    } else if (joiningStatus === "NOT_JOINED" ||
+                        joiningStatus === "NO_SHOW") {
+                        joiningBadge.classList.add("status-not-joined");
+                    } else if (joiningStatus === "DEFERRED") {
+                        joiningBadge.classList.add("status-deferred");
+                    } else {
+                        joiningBadge.classList.add("status-pending");
+                    }
+
+                    joiningCell.appendChild(joiningBadge);
+                    row.appendChild(joiningCell);
+
+                    const placementCell = document.createElement("td");
+                    const placementBadge = document.createElement("span");
+                    const placementStatus = p.placementStatus || "";
+
+                    placementBadge.textContent = placementStatus;
+                    placementBadge.className = "status";
+
+                    if (placementStatus === "ACTIVE") {
+                        placementBadge.classList.add("status-active");
+                    } else {
+                        placementBadge.classList.add("status-cancelled");
+                    }
+
+                    placementCell.appendChild(placementBadge);
+                    row.appendChild(placementCell);
+
+                    table.appendChild(row);
+
+                });
+
+            } catch (error) {
+
+                table.innerHTML =
+                    '<tr><td colspan="11" class="empty">Error loading placements.</td></tr>';
+
+                showMessage("Error loading placements: " + error.message, "error");
+                console.error(error);
+            }
+        }
+
+
+        // Add placement
+
+        document.getElementById("placementForm")
+            .addEventListener("submit", async function(event) {
+
+                event.preventDefault();
+
+                const submitButton = document.getElementById("submitBtn");
+
+                const data = new URLSearchParams();
+
+                data.append("candidateId",
+                    document.getElementById("candidateId").value);
+
+                data.append("companyId",
+                    document.getElementById("companyId").value);
+
+                data.append("jobId",
+                    document.getElementById("jobId").value);
+
+                data.append("offerId",
+                    document.getElementById("offerId").value);
+
+                data.append("designation",
+                    document.getElementById("designation").value);
+
+                data.append("finalPackage",
+                    document.getElementById("package").value);
+
+                data.append("expectedJoiningDate",
+                    document.getElementById("expectedDate").value);
+
+                data.append("actualJoiningDate",
+                    document.getElementById("actualDate").value);
+
+                data.append("joiningStatus",
+                    document.getElementById("joiningStatus").value);
+
+                data.append("placementStatus",
+                    document.getElementById("placementStatus").value);
+
+                try {
+
+                    submitButton.disabled = true;
+                    submitButton.textContent = "Adding...";
+
+                    const response = await fetch("/api/placements", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body: data
+                    });
+
+                    const result = await response.text();
+
+                    if (!response.ok ||
+                        result.trim() !== "Placement added successfully!") {
+
+                        throw new Error(result || "Unable to add placement.");
+                    }
+
+                    showMessage("Placement added successfully!", "success");
+
+                    this.reset();
+
+                    await loadPlacements();
+                    await loadAllDropdowns();
+
+                } catch (error) {
+
+                    showMessage("Error: " + error.message, "error");
+
+                } finally {
+
+                    submitButton.disabled = false;
+                    submitButton.textContent = "Add Placement";
+
+                }
+
+            });
+
+
+        // Start the page
+
+        loadAllDropdowns();
+        loadPlacements();
+    </script>
+
+</body>
+
+</html>

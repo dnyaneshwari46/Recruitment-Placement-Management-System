@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Management | Recruitment Placement System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 245px;
+            background: #172554;
+            color: white;
+            padding: 25px 15px;
+            flex-shrink: 0;
+        }
+        
+        .logo {
+            font-size: 21px;
+            font-weight: bold;
+            padding: 0 12px 30px;
+            line-height: 1.5;
+        }
+        
+        .sidebar a {
+            display: block;
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 13px 15px;
+            margin-bottom: 7px;
+            border-radius: 7px;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+        
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #2563eb;
+            color: white;
+        }
+        
+        .main {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .topbar {
+            background: white;
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .topbar h3 {
+            margin: 0;
+            color: #172554;
+        }
+        
+        .admin {
+            background: #dbeafe;
+            color: #1d4ed8;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .page-heading {
+            margin-bottom: 25px;
+        }
+        
+        .page-heading h2 {
+            margin: 0 0 8px;
+            color: #172554;
+            font-size: 26px;
+        }
+        
+        .page-heading p {
+            margin: 0;
+            color: #64748b;
+            font-size: 14px;
+        }
+        
+        .card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(15, 23, 42, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .card-heading {
+            margin-bottom: 22px;
+        }
+        
+        .card-heading h3 {
+            margin: 0 0 6px;
+            color: #172554;
+            font-size: 19px;
+        }
+        
+        .card-heading p {
+            margin: 0;
+            color: #64748b;
+            font-size: 13px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px 22px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        label {
+            font-size: 13px;
+            font-weight: bold;
+            color: #334155;
+        }
+        
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 14px;
+            background: white;
+            color: #1e293b;
+            outline: none;
+        }
+        
+        input:focus,
+        select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .form-actions {
+            margin-top: 22px;
+        }
+        
+        button {
+            padding: 11px 20px;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        
+        .primary-btn {
+            background: #2563eb;
+            color: white;
+        }
+        
+        .primary-btn:hover {
+            background: #1d4ed8;
+        }
+        
+        .secondary-btn {
+            background: white;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+        }
+        
+        .secondary-btn:hover {
+            background: #f1f5f9;
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .message {
+            display: none;
+            padding: 12px 15px;
+            border-radius: 7px;
+            margin-top: 18px;
+            font-size: 14px;
+        }
+        
+        .success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+        
+        .table-header h3 {
+            margin: 0 0 6px;
+            color: #172554;
+        }
+        
+        .table-header p {
+            margin: 0;
+            color: #64748b;
+            font-size: 13px;
+        }
+        
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            min-width: 1100px;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        
+        th,
+        td {
+            padding: 13px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        th {
+            background: #eff6ff;
+            color: #1e3a8a;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        
+        tbody tr:nth-child(even) {
+            background: #f8fafc;
+        }
+        
+        tbody tr:hover {
+            background: #eff6ff;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: #dbeafe;
+            color: #1d4ed8;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+        
+        @media (max-width: 650px) {
+            .layout {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                padding: 15px;
+            }
+            .logo {
+                padding-bottom: 15px;
+            }
+            .sidebar a {
+                display: inline-block;
+                margin: 3px;
+                padding: 10px;
+            }
+            .topbar {
+                padding: 15px;
+            }
+            .content {
+                padding: 15px;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .card {
+                padding: 18px;
+            }
+            .table-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <aside class="sidebar">
+
+            <div class="logo">Recruitment<br>Placement System</div>
+
+            <a href="dashboard.html">Dashboard</a>
+            <a href="candidates.html">Candidates</a>
+            <a href="companies.html">Companies</a>
+            <a href="jobs.html">Jobs</a>
+            <a href="applications.html">Applications</a>
+            <a href="interviews.html" class="active">Interviews</a>
+            <a href="offers.html">Offers</a>
+            <a href="placements.html">Placements</a>
+            <a href="feedback.html">Interview Feedback</a>
+            <a href="eligibility.html">Eligibility</a>
+            <a href="reports.html">Reports</a>
+            <a href="index.html">Logout</a>
+
+        </aside>
+
+        <main class="main">
+
+            <header class="topbar">
+                <h3>Interview Management</h3>
+                <span class="admin">Administrator</span>
+            </header>
+
+            <div class="content">
+
+                <div class="page-heading">
+                    <h2>Interview Management</h2>
+                    <p>Schedule interviews and manage candidate interview rounds.</p>
+                </div>
+
+                <!-- Schedule Interview -->
+                <section class="card">
+
+                    <div class="card-heading">
+                        <h3>Schedule New Interview</h3>
+                        <p>Enter the application, round and interview schedule details.</p>
+                    </div>
+
+                    <form id="interviewForm" onsubmit="addInterview(event)">
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label for="applicationId">Application *</label>
+                                <select id="applicationId" required>
+                                <option value="">Loading applications...</option>
+                            </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="roundNumber">Round Number *</label>
+                                <input type="number" id="roundNumber" min="1" placeholder="Enter round number" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="roundType">Round Type *</label>
+                                <select id="roundType" required>
+                                <option value="TECHNICAL">Technical</option>
+                                <option value="HR">HR</option>
+                                <option value="APTITUDE">Aptitude</option>
+                                <option value="MANAGERIAL">Managerial</option>
+                            </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="interviewDate">Interview Date *</label>
+                                <input type="date" id="interviewDate" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="interviewTime">Interview Time *</label>
+                                <input type="time" id="interviewTime" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="mode">Interview Mode *</label>
+                                <select id="mode" required>
+                                <option value="ONLINE">Online</option>
+                                <option value="OFFLINE">Offline</option>
+                            </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="interviewerName">Interviewer Name *</label>
+                                <input type="text" id="interviewerName" placeholder="Enter interviewer name" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="meetingLocation">Meeting Link / Location *</label>
+                                <input type="text" id="meetingLocation" placeholder="Enter meeting link or location" required>
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="primary-btn" id="submitBtn">
+                            Schedule Interview
+                        </button>
+                        </div>
+
+                    </form>
+
+                    <div id="message" class="message" role="status"></div>
+
+                </section>
+
+                <!-- Interviews Table -->
+                <section class="card">
+
+                    <div class="table-header">
+                        <div>
+                            <h3>All Interviews</h3>
+                            <p>View scheduled interviews and their current status.</p>
+                        </div>
+
+                        <button type="button" class="secondary-btn" onclick="loadInterviews()">
+                        Refresh Records
+                    </button>
+                    </div>
+
+                    <div class="table-container">
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Interview ID</th>
+                                    <th>Application ID</th>
+                                    <th>Round</th>
+                                    <th>Round Type</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Mode</th>
+                                    <th>Interviewer</th>
+                                    <th>Location</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="interviewTable">
+                                <tr>
+                                    <td colspan="10">Loading interviews...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+            <footer class="footer">
+                Recruitment Placement System | Interview Management
+            </footer>
+
+        </main>
+
+    </div>
+
+    <script>
+        function showMessage(message, type) {
+            const box = document.getElementById("message");
+            box.textContent = message;
+            box.className = "message " + type;
+        }
+
+        // Load applications into dropdown
+        async function loadApplications() {
+
+            try {
+
+                const response = await fetch("/api/applications");
+
+                if (!response.ok) {
+                    throw new Error("Unable to load applications");
+                }
+
+                const applications = await response.json();
+
+                const dropdown = document.getElementById("applicationId");
+
+                dropdown.innerHTML = '<option value="">Select Application</option>';
+
+                applications.forEach(application => {
+
+                    const option = document.createElement("option");
+
+                    option.value = application.applicationId;
+
+                    option.textContent =
+                        "Application " + application.applicationId +
+                        " - Candidate " + application.candidateId +
+                        " - Job " + application.jobId;
+
+                    dropdown.appendChild(option);
+
+                });
+
+            } catch (error) {
+
+                document.getElementById("applicationId").innerHTML =
+                    '<option value="">Unable to load applications</option>';
+
+                console.error(error);
+            }
+        }
+
+        // Load all interviews
+        async function loadInterviews() {
+
+            const table = document.getElementById("interviewTable");
+
+            try {
+
+                const response = await fetch("/api/interviews");
+
+                if (!response.ok) {
+                    throw new Error("Unable to load interviews");
+                }
+
+                const interviews = await response.json();
+
+                table.innerHTML = "";
+
+                if (interviews.length === 0) {
+
+                    table.innerHTML =
+                        '<tr><td colspan="10">No interviews found.</td></tr>';
+
+                    return;
+                }
+
+                interviews.forEach(interview => {
+
+                    const row = document.createElement("tr");
+
+                    const values = [
+                        interview.interviewId,
+                        interview.applicationId,
+                        interview.roundNumber,
+                        interview.roundType,
+                        interview.interviewDate,
+                        interview.interviewTime,
+                        interview.mode,
+                        interview.interviewer,
+                        interview.meetingLocation
+                    ];
+
+                    values.forEach(value => {
+
+                        const cell = document.createElement("td");
+                        cell.textContent = value == null ? "" : value;
+                        row.appendChild(cell);
+
+                    });
+
+                    const statusCell = document.createElement("td");
+                    const badge = document.createElement("span");
+
+                    badge.className = "status";
+                    badge.textContent = interview.status == null ?
+                        "" :
+                        interview.status;
+
+                    statusCell.appendChild(badge);
+                    row.appendChild(statusCell);
+
+                    table.appendChild(row);
+
+                });
+
+            } catch (error) {
+
+                table.innerHTML =
+                    '<tr><td colspan="10">Error loading interviews.</td></tr>';
+
+                console.error(error);
+            }
+        }
+
+        // Add a new interview
+        async function addInterview(event) {
+
+            event.preventDefault();
+
+            const formData = new URLSearchParams();
+
+            formData.append("applicationId",
+                document.getElementById("applicationId").value);
+
+            formData.append("roundNumber",
+                document.getElementById("roundNumber").value);
+
+            formData.append("roundType",
+                document.getElementById("roundType").value);
+
+            formData.append("interviewDate",
+                document.getElementById("interviewDate").value);
+
+            formData.append("interviewTime",
+                document.getElementById("interviewTime").value);
+
+            formData.append("mode",
+                document.getElementById("mode").value);
+
+            formData.append("interviewerName",
+                document.getElementById("interviewerName").value);
+
+            formData.append("meetingLocation",
+                document.getElementById("meetingLocation").value);
+
+            const submitBtn = document.getElementById("submitBtn");
+
+            try {
+
+                submitBtn.disabled = true;
+                submitBtn.textContent = "Scheduling...";
+
+                const response = await fetch("/api/interviews", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+
+                    body: formData.toString()
+
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+
+                    showMessage(
+                        "Interview scheduled successfully!",
+                        "success"
+                    );
+
+                    document.getElementById("interviewForm").reset();
+
+                    await loadInterviews();
+
+                } else {
+
+                    showMessage(
+                        result.message || "Unable to schedule interview.",
+                        "error"
+                    );
+
+                }
+
+            } catch (error) {
+
+                showMessage(
+                    "Server connection failed. Please try again.",
+                    "error"
+                );
+
+                console.error(error);
+
+            } finally {
+
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Schedule Interview";
+
+            }
+        }
+
+        // Load page data
+        async function initializePage() {
+
+            await loadApplications();
+            await loadInterviews();
+
+        }
+
+        initializePage();
+    </script>
+
+</body>
+
+</html>

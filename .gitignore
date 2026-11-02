@@ -1,0 +1,21 @@
+# Java compiled files
+*.class
+out/
+bin/
+
+# Temporary files
+.history/
+*.log
+
+# Personal configuration
+.env
+*.properties
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Connector source and test files
+lib/**/src/
+lib/**/test/
+*_REPORT.txt

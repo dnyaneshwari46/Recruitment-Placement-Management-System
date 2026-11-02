@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Management - RPMS</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        
+        body {
+            background: #f4f6fb;
+            color: #263248;
+        }
+        
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+        /* Sidebar */
+        
+        .sidebar {
+            width: 250px;
+            background: #172554;
+            color: white;
+            padding: 25px 15px;
+            flex-shrink: 0;
+        }
+        
+        .logo {
+            font-size: 21px;
+            font-weight: bold;
+            padding: 5px 12px 30px;
+            line-height: 1.5;
+        }
+        
+        .logo span {
+            color: #60a5fa;
+        }
+        
+        .menu-title {
+            color: #94a3b8;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            padding: 15px 12px;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 14px;
+            margin: 5px 0;
+            border-radius: 9px;
+            color: #dbeafe;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        
+        .nav-link:hover,
+        .nav-link.active {
+            background: #2563eb;
+            color: white;
+            transform: translateX(3px);
+        }
+        
+        .nav-icon {
+            font-size: 19px;
+            width: 23px;
+            text-align: center;
+        }
+        
+        .logout {
+            width: 100%;
+            margin-top: 25px;
+            background: #991b1b;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .logout:hover {
+            background: #dc2626;
+        }
+        /* Main area */
+        
+        .main {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .topbar {
+            background: white;
+            padding: 20px 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+        }
+        
+        .topbar h2 {
+            color: #172554;
+            font-size: 21px;
+        }
+        
+        .admin {
+            background: #eff6ff;
+            color: #1d4ed8;
+            padding: 10px 17px;
+            border-radius: 25px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        .content {
+            padding: 30px 35px;
+        }
+        
+        .page-heading {
+            margin-bottom: 25px;
+        }
+        
+        .page-heading h1 {
+            color: #172554;
+            font-size: 26px;
+            margin-bottom: 7px;
+        }
+        
+        .page-heading p {
+            color: #64748b;
+            font-size: 14px;
+        }
+        /* Cards */
+        
+        .card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 13px;
+            border: 1px solid #e8edf5;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+        }
+        
+        .card-heading {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 23px;
+        }
+        
+        .card-icon {
+            width: 43px;
+            height: 43px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #dbeafe;
+            border-radius: 11px;
+            font-size: 22px;
+        }
+        
+        .card-heading h2 {
+            color: #172554;
+            font-size: 19px;
+        }
+        
+        .card-heading p {
+            color: #94a3b8;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+        /* Form */
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 19px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+        }
+        
+        input,
+        select {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid #dbe2ed;
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+            background: #fbfcff;
+            transition: 0.2s;
+        }
+        
+        input:focus,
+        select:focus {
+            border-color: #3b82f6;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.10);
+        }
+        
+        .primary-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 22px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        .primary-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+        /* Table */
+        
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        
+        .refresh-btn {
+            background: #eff6ff;
+            color: #2563eb;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .refresh-btn:hover {
+            background: #dbeafe;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            border: 1px solid #e8edf5;
+            border-radius: 9px;
+        }
+        
+        table {
+            width: 100%;
+            min-width: 1050px;
+            border-collapse: collapse;
+            white-space: nowrap;
+        }
+        
+        th {
+            background: #172554;
+            color: white;
+            padding: 15px 13px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #edf0f5;
+            font-size: 13px;
+            color: #475569;
+        }
+        
+        tbody tr:nth-child(even) {
+            background: #f8faff;
+        }
+        
+        tbody tr:hover {
+            background: #eff6ff;
+        }
+        
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        #message {
+            margin-top: 15px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 25px;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+        
+        @media (max-width: 800px) {
+            .layout {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+            }
+            .sidebar nav {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 5px;
+            }
+            .menu-title {
+                display: none;
+            }
+            .content {
+                padding: 20px;
+            }
+            .topbar {
+                padding: 18px 20px;
+            }
+        }
+        
+        @media (max-width: 500px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .sidebar nav {
+                grid-template-columns: 1fr;
+            }
+            .card {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <div class="logo">
+                RPMS <span>●</span><br>
+                <small style="font-size:12px;color:#94a3b8;font-weight:normal;">
+                Recruitment System
+            </small>
+            </div>
+
+            <div class="menu-title">MAIN MENU</div>
+
+            <nav>
+                <a href="dashboard.html" class="nav-link">
+                    <span class="nav-icon">⌂</span> Dashboard
+                </a>
+
+                <a href="candidates.html" class="nav-link">
+                    <span class="nav-icon">👥</span> Candidates
+                </a>
+
+                <a href="companies.html" class="nav-link active">
+                    <span class="nav-icon">🏢</span> Companies
+                </a>
+
+                <a href="jobs.html" class="nav-link">
+                    <span class="nav-icon">💼</span> Jobs
+                </a>
+
+                <a href="applications.html" class="nav-link">
+                    <span class="nav-icon">📄</span> Applications
+                </a>
+
+                <a href="interviews.html" class="nav-link">
+                    <span class="nav-icon">🗓️</span> Interviews
+                </a>
+
+                <a href="offers.html" class="nav-link">
+                    <span class="nav-icon">🎁</span> Offers
+                </a>
+
+                <a href="placements.html" class="nav-link">
+                    <span class="nav-icon">🎓</span> Placements
+                </a>
+
+                <a href="feedback.html" class="nav-link">
+                    <span class="nav-icon">⭐</span> Interview Feedback
+                </a>
+
+                <a href="eligibility.html" class="nav-link">
+                    <span class="nav-icon">✅</span> Eligibility
+                </a>
+
+                <a href="reports.html" class="nav-link">
+                    <span class="nav-icon">📊</span> Reports
+                </a>
+            </nav>
+
+            <button class="logout" onclick="logout()">↪ Logout</button>
+
+        </aside>
+
+        <!-- Main content -->
+        <main class="main">
+
+            <header class="topbar">
+                <h2>Company Management</h2>
+                <div class="admin">👤 Administrator</div>
+            </header>
+
+            <div class="content">
+
+                <div class="page-heading">
+                    <h1>Company Management</h1>
+                    <p>Add companies and manage registered company records.</p>
+                </div>
+
+                <!-- Add Company -->
+                <section class="card">
+
+                    <div class="card-heading">
+                        <div class="card-icon">🏢</div>
+                        <div>
+                            <h2>Add New Company</h2>
+                            <p>Enter company and HR contact details below.</p>
+                        </div>
+                    </div>
+
+                    <form id="companyForm">
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label>Company Name</label>
+                                <input type="text" name="companyName" placeholder="Enter company name" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Industry</label>
+                                <input type="text" name="industry" placeholder="Example: Information Technology">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Website</label>
+                                <input type="text" name="website" placeholder="Enter company website">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Location</label>
+                                <input type="text" name="location" placeholder="Enter company location">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Company Type</label>
+                                <select name="companyType" required>
+                                <option value="">Select Company Type</option>
+                                <option value="STARTUP">Startup</option>
+                                <option value="MID_SIZE">Mid Size</option>
+                                <option value="MNC">MNC</option>
+                                <option value="CONSULTANCY">Consultancy</option>
+                            </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>HR Name</label>
+                                <input type="text" name="hrName" placeholder="Enter HR name">
+                            </div>
+
+                            <div class="form-group">
+                                <label>HR Email</label>
+                                <input type="email" name="hrEmail" placeholder="Enter HR email">
+                            </div>
+
+                            <div class="form-group">
+                                <label>HR Mobile</label>
+                                <input type="text" name="hrMobile" placeholder="Enter HR mobile number">
+                            </div>
+
+                        </div>
+
+                        <button type="submit" class="primary-btn">
+                        + Add Company
+                    </button>
+
+                        <p id="message"></p>
+
+                    </form>
+
+                </section>
+
+                <!-- Company Records -->
+                <section class="card">
+
+                    <div class="table-header">
+
+                        <div class="card-heading" style="margin-bottom:0;">
+                            <div class="card-icon">📋</div>
+                            <div>
+                                <h2>Company Records</h2>
+                                <p>Registered companies retrieved from the database.</p>
+                            </div>
+                        </div>
+
+                        <button type="button" class="refresh-btn" onclick="loadCompanies()">
+                        ↻ Refresh Companies
+                    </button>
+
+                    </div>
+
+                    <div class="table-container">
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Company Name</th>
+                                    <th>Industry</th>
+                                    <th>Website</th>
+                                    <th>Location</th>
+                                    <th>Company Type</th>
+                                    <th>HR Name</th>
+                                    <th>HR Email</th>
+                                    <th>HR Mobile</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="companyTable">
+                                <tr>
+                                    <td colspan="10">Loading companies...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+            <footer class="footer">
+                © 2026 Recruitment & Placement Management System
+            </footer>
+
+        </main>
+
+    </div>
+
+    <script>
+        // Load companies from database
+        async function loadCompanies() {
+
+            const table = document.getElementById("companyTable");
+
+            table.innerHTML =
+                '<tr><td colspan="10">Loading companies...</td></tr>';
+
+            try {
+
+                const response = await fetch("/api/companies");
+
+                if (!response.ok) {
+                    throw new Error("Unable to load companies");
+                }
+
+                const companies = await response.json();
+
+                table.innerHTML = "";
+
+                if (companies.length === 0) {
+                    table.innerHTML =
+                        '<tr><td colspan="10">No companies found.</td></tr>';
+                    return;
+                }
+
+                companies.forEach(company => {
+
+                    const row = document.createElement("tr");
+
+                    const values = [
+                        company.companyId,
+                        company.companyName,
+                        company.industry,
+                        company.website,
+                        company.location,
+                        company.companyType,
+                        company.hrName,
+                        company.hrEmail,
+                        company.hrMobile,
+                        company.status
+                    ];
+
+                    values.forEach(value => {
+
+                        const cell = document.createElement("td");
+
+                        cell.textContent = value == null ? "" : value;
+
+                        row.appendChild(cell);
+
+                    });
+
+                    table.appendChild(row);
+
+                });
+
+            } catch (error) {
+
+                table.innerHTML =
+                    '<tr><td colspan="10">Error loading companies.</td></tr>';
+
+                console.error(error);
+            }
+        }
+
+        // Add company to database
+        document.getElementById("companyForm")
+            .addEventListener("submit", async function(event) {
+
+                event.preventDefault();
+
+                const message = document.getElementById("message");
+                const submitButton = this.querySelector("button[type='submit']");
+
+                const formData = new FormData(this);
+                const data = new URLSearchParams(formData);
+
+                submitButton.disabled = true;
+                message.style.color = "#334155";
+                message.textContent = "Saving company...";
+
+                try {
+
+                    const response = await fetch("/api/companies", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body: data
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok && result.success) {
+
+                        message.style.color = "green";
+                        message.textContent = result.message || "Company added successfully!";
+
+                        this.reset();
+
+                        loadCompanies();
+
+                    } else {
+
+                        throw new Error(result.message || "Unable to add company.");
+                    }
+
+                } catch (error) {
+
+                    message.style.color = "red";
+                    message.textContent = error.message;
+
+                    console.error(error);
+                } finally {
+                    submitButton.disabled = false;
+                }
+
+            });
+
+        // Load records when page opens
+        loadCompanies();
+
+        function logout() {
+            window.location.href = "index.html";
+        }
+    </script>
+
+</body>
+
+</html>

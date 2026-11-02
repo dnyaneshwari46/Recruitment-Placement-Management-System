@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Management | Recruitment Placement System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 245px;
+            background: #172554;
+            color: white;
+            padding: 25px 15px;
+            flex-shrink: 0;
+        }
+        
+        .logo {
+            font-size: 21px;
+            font-weight: bold;
+            padding: 0 12px 30px;
+            line-height: 1.5;
+        }
+        
+        .sidebar a {
+            display: block;
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 13px 15px;
+            margin-bottom: 7px;
+            border-radius: 7px;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+        
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #2563eb;
+            color: white;
+        }
+        
+        .main {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .topbar {
+            background: white;
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .topbar h3 {
+            margin: 0;
+            color: #172554;
+        }
+        
+        .admin {
+            background: #dbeafe;
+            color: #1d4ed8;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .page-heading {
+            margin-bottom: 25px;
+        }
+        
+        .page-heading h2 {
+            margin: 0 0 8px;
+            color: #172554;
+            font-size: 26px;
+        }
+        
+        .page-heading p {
+            margin: 0;
+            color: #64748b;
+            font-size: 14px;
+        }
+        
+        .card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(15, 23, 42, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .card-heading {
+            margin-bottom: 22px;
+        }
+        
+        .card-heading h3 {
+            margin: 0 0 6px;
+            color: #172554;
+            font-size: 19px;
+        }
+        
+        .card-heading p {
+            margin: 0;
+            color: #64748b;
+            font-size: 13px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+        
+        .form-group label {
+            font-size: 13px;
+            font-weight: bold;
+            color: #334155;
+        }
+        
+        input,
+        select {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 14px;
+            background: white;
+            color: #1e293b;
+            outline: none;
+        }
+        
+        input:focus,
+        select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .form-actions {
+            margin-top: 22px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        button {
+            padding: 11px 20px;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        
+        .primary-btn {
+            background: #2563eb;
+            color: white;
+        }
+        
+        .primary-btn:hover {
+            background: #1d4ed8;
+        }
+        
+        .secondary-btn {
+            background: white;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+        }
+        
+        .secondary-btn:hover {
+            background: #f1f5f9;
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .message {
+            display: none;
+            padding: 12px 15px;
+            border-radius: 7px;
+            margin-top: 18px;
+            font-size: 14px;
+        }
+        
+        .success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+        
+        .table-header h3 {
+            margin: 0;
+            color: #172554;
+        }
+        
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            min-width: 1250px;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        
+        th,
+        td {
+            padding: 13px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+            white-space: nowrap;
+        }
+        
+        th {
+            background: #eff6ff;
+            color: #1e3a8a;
+            font-weight: bold;
+        }
+        
+        tbody tr:nth-child(even) {
+            background: #f8fafc;
+        }
+        
+        tbody tr:hover {
+            background: #eff6ff;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: #dcfce7;
+            color: #166534;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+        
+        @media (max-width: 900px) {
+            .form-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+        
+        @media (max-width: 650px) {
+            .layout {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                padding: 15px;
+            }
+            .logo {
+                padding-bottom: 15px;
+            }
+            .sidebar a {
+                display: inline-block;
+                margin: 3px;
+                padding: 10px;
+            }
+            .topbar {
+                padding: 15px;
+            }
+            .content {
+                padding: 15px;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .card {
+                padding: 18px;
+            }
+            .table-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <aside class="sidebar">
+            <div class="logo">Recruitment<br>Placement System</div>
+
+            <a href="dashboard.html">Dashboard</a>
+            <a href="candidates.html">Candidates</a>
+            <a href="companies.html">Companies</a>
+            <a href="jobs.html" class="active">Jobs</a>
+            <a href="applications.html">Applications</a>
+            <a href="interviews.html">Interviews</a>
+            <a href="offers.html">Offers</a>
+            <a href="placements.html">Placements</a>
+            <a href="feedback.html">Interview Feedback</a>
+            <a href="eligibility.html">Eligibility</a>
+            <a href="reports.html">Reports</a>
+            <a href="index.html">Logout</a>
+        </aside>
+
+        <main class="main">
+
+            <header class="topbar">
+                <h3>Job Management</h3>
+                <span class="admin">Administrator</span>
+            </header>
+
+            <div class="content">
+
+                <div class="page-heading">
+                    <h2>Job Management</h2>
+                    <p>Manage job openings, company requirements and eligibility criteria.</p>
+                </div>
+
+                <!-- Add Job Form -->
+                <section class="card">
+
+                    <div class="card-heading">
+                        <h3>Add New Job</h3>
+                        <p>Enter the job details and eligibility requirements below.</p>
+                    </div>
+
+                    <form id="jobForm">
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label for="companyId">Company *</label>
+                                <select id="companyId" required>
+                                <option value="">Select Company</option>
+                            </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="jobTitle">Job Title *</label>
+                                <input type="text" id="jobTitle" placeholder="Enter job title" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="employmentType">Employment Type *</label>
+                                <select id="employmentType" required>
+                                <option value="">Select Employment Type</option>
+                                <option value="FULL_TIME">Full Time</option>
+                                <option value="PART_TIME">Part Time</option>
+                                <option value="INTERNSHIP">Internship</option>
+                            </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="location">Job Location *</label>
+                                <input type="text" id="location" placeholder="Enter location" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="openings">Number of Openings *</label>
+                                <input type="number" id="openings" placeholder="Enter openings" min="1" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="minimumPackage">Minimum Package (LPA) *</label>
+                                <input type="number" id="minimumPackage" placeholder="Minimum package" min="0" step="0.1" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="maximumPackage">Maximum Package (LPA) *</label>
+                                <input type="number" id="maximumPackage" placeholder="Maximum package" min="0" step="0.1" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="minimumPercentage">Minimum Percentage *</label>
+                                <input type="number" id="minimumPercentage" placeholder="Minimum percentage" min="0" max="100" step="0.01" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="minPassingYear">Minimum Passing Year *</label>
+                                <input type="number" id="minPassingYear" placeholder="Minimum passing year" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="maxPassingYear">Maximum Passing Year *</label>
+                                <input type="number" id="maxPassingYear" placeholder="Maximum passing year" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="maxBacklogs">Maximum Backlogs *</label>
+                                <input type="number" id="maxBacklogs" placeholder="Maximum backlogs" min="0" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="experienceRequired">Experience (Years) *</label>
+                                <input type="number" id="experienceRequired" placeholder="Experience required" min="0" step="0.1" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="qualificationRule">Qualification Rule *</label>
+                                <input type="text" id="qualificationRule" placeholder="Enter qualification rule" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="postedDate">Posted Date *</label>
+                                <input type="date" id="postedDate" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="applicationDeadline">Application Deadline *</label>
+                                <input type="date" id="applicationDeadline" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="createdBy">Admin ID *</label>
+                                <input type="number" id="createdBy" value="1" min="1" required>
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="primary-btn" id="submitBtn">Add Job</button>
+                            <button type="reset" class="secondary-btn">Clear Form</button>
+                        </div>
+
+                        <div id="formMessage" class="message" role="status"></div>
+
+                    </form>
+
+                </section>
+
+                <!-- Jobs Table -->
+                <section class="card">
+
+                    <div class="table-header">
+                        <div class="card-heading">
+                            <h3>All Jobs</h3>
+                            <p>View the available job openings and their details.</p>
+                        </div>
+
+                        <button class="secondary-btn" type="button" onclick="loadJobs()">
+                        Refresh Records
+                    </button>
+                    </div>
+
+                    <div class="table-container">
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Job Code</th>
+                                    <th>Company ID</th>
+                                    <th>Job Title</th>
+                                    <th>Type</th>
+                                    <th>Location</th>
+                                    <th>Openings</th>
+                                    <th>Package (LPA)</th>
+                                    <th>Minimum %</th>
+                                    <th>Passing Year</th>
+                                    <th>Backlogs</th>
+                                    <th>Deadline</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="jobTable">
+                                <tr>
+                                    <td colspan="13">Loading job records...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+            <footer class="footer">
+                Recruitment Placement System | Job Management
+            </footer>
+
+        </main>
+
+    </div>
+
+    <script>
+        function showMessage(message, type) {
+            const box = document.getElementById("formMessage");
+            box.textContent = message;
+            box.className = "message " + type;
+        }
+
+        async function loadCompanies() {
+            try {
+                const response = await fetch("/api/companies");
+
+                if (!response.ok) {
+                    throw new Error("Unable to load companies.");
+                }
+
+                const companies = await response.json();
+
+                const select = document.getElementById("companyId");
+
+                select.innerHTML = '<option value="">Select Company</option>';
+
+                companies.forEach(company => {
+                    const option = document.createElement("option");
+                    option.value = company.companyId;
+                    option.textContent = company.companyName;
+                    select.appendChild(option);
+                });
+
+            } catch (error) {
+                showMessage("Unable to load companies. Please refresh the page.", "error");
+            }
+        }
+
+        async function loadJobs() {
+            const table = document.getElementById("jobTable");
+
+            try {
+                const response = await fetch("/api/jobs");
+
+                if (!response.ok) {
+                    throw new Error("Unable to load jobs.");
+                }
+
+                const jobs = await response.json();
+
+                table.innerHTML = "";
+
+                if (jobs.length === 0) {
+                    table.innerHTML = '<tr><td colspan="13">No job records found.</td></tr>';
+                    return;
+                }
+
+                jobs.forEach(job => {
+                    const row = document.createElement("tr");
+
+                    const values = [
+                        job.jobId,
+                        job.jobCode,
+                        job.companyId,
+                        job.jobTitle,
+                        job.employmentType,
+                        job.location,
+                        job.openings,
+                        job.minimumPackage + " - " + job.maximumPackage,
+                        job.minimumPercentage + "%",
+                        job.minPassingYear + " - " + job.maxPassingYear,
+                        job.maxBacklogs,
+                        job.applicationDeadline
+                    ];
+
+                    values.forEach(value => {
+                        const cell = document.createElement("td");
+                        cell.textContent = value == null ? "" : value;
+                        row.appendChild(cell);
+                    });
+
+                    const statusCell = document.createElement("td");
+                    const badge = document.createElement("span");
+                    badge.className = "status";
+                    badge.textContent = job.status == null ? "" : job.status;
+                    statusCell.appendChild(badge);
+                    row.appendChild(statusCell);
+
+                    table.appendChild(row);
+                });
+
+            } catch (error) {
+                table.innerHTML = '<tr><td colspan="13">Unable to load job records. Please refresh.</td></tr>';
+            }
+        }
+
+        document.getElementById("jobForm").addEventListener("submit", async function(event) {
+
+            event.preventDefault();
+
+            const form = this;
+            const submitBtn = document.getElementById("submitBtn");
+
+            const minimumPackage = Number(document.getElementById("minimumPackage").value);
+            const maximumPackage = Number(document.getElementById("maximumPackage").value);
+            const minPassingYear = Number(document.getElementById("minPassingYear").value);
+            const maxPassingYear = Number(document.getElementById("maxPassingYear").value);
+
+            if (maximumPackage < minimumPackage) {
+                showMessage("Maximum package cannot be less than minimum package.", "error");
+                return;
+            }
+
+            if (maxPassingYear < minPassingYear) {
+                showMessage("Maximum passing year cannot be less than minimum passing year.", "error");
+                return;
+            }
+
+            const data = new URLSearchParams({
+                companyId: document.getElementById("companyId").value,
+                jobTitle: document.getElementById("jobTitle").value,
+                employmentType: document.getElementById("employmentType").value,
+                location: document.getElementById("location").value,
+                openings: document.getElementById("openings").value,
+                minimumPackage: document.getElementById("minimumPackage").value,
+                maximumPackage: document.getElementById("maximumPackage").value,
+                minimumPercentage: document.getElementById("minimumPercentage").value,
+                minPassingYear: document.getElementById("minPassingYear").value,
+                maxPassingYear: document.getElementById("maxPassingYear").value,
+                maxBacklogs: document.getElementById("maxBacklogs").value,
+                experienceRequired: document.getElementById("experienceRequired").value,
+                qualificationRule: document.getElementById("qualificationRule").value,
+                postedDate: document.getElementById("postedDate").value,
+                applicationDeadline: document.getElementById("applicationDeadline").value,
+                createdBy: document.getElementById("createdBy").value
+            });
+
+            try {
+                submitBtn.disabled = true;
+                submitBtn.textContent = "Saving...";
+
+                const response = await fetch("/api/jobs", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: data
+                });
+
+                const result = await response.text();
+
+                if (response.ok) {
+                    showMessage("Job added successfully!", "success");
+                    form.reset();
+                    await loadJobs();
+                } else {
+                    showMessage("Error: " + result, "error");
+                }
+
+            } catch (error) {
+                showMessage("Unable to connect to server. Please try again.", "error");
+
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Add Job";
+            }
+
+        });
+
+        loadCompanies();
+        loadJobs();
+    </script>
+
+</body>
+
+</html>

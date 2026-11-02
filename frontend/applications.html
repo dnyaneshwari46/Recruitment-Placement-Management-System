@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Management | Recruitment Placement System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 245px;
+            background: #172554;
+            color: white;
+            padding: 25px 15px;
+            flex-shrink: 0;
+        }
+        
+        .logo {
+            font-size: 21px;
+            font-weight: bold;
+            padding: 0 12px 30px;
+            line-height: 1.5;
+        }
+        
+        .sidebar a {
+            display: block;
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 13px 15px;
+            margin-bottom: 7px;
+            border-radius: 7px;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+        
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #2563eb;
+            color: white;
+        }
+        
+        .main {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .topbar {
+            background: white;
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .topbar h3 {
+            margin: 0;
+            color: #172554;
+        }
+        
+        .admin {
+            background: #dbeafe;
+            color: #1d4ed8;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .page-heading {
+            margin-bottom: 25px;
+        }
+        
+        .page-heading h2 {
+            margin: 0 0 8px;
+            color: #172554;
+            font-size: 26px;
+        }
+        
+        .page-heading p {
+            margin: 0;
+            color: #64748b;
+            font-size: 14px;
+        }
+        
+        .card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(15, 23, 42, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .card-heading {
+            margin-bottom: 22px;
+        }
+        
+        .card-heading h3 {
+            margin: 0 0 6px;
+            color: #172554;
+            font-size: 19px;
+        }
+        
+        .card-heading p {
+            margin: 0;
+            color: #64748b;
+            font-size: 13px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        label {
+            font-size: 13px;
+            font-weight: bold;
+            color: #334155;
+        }
+        
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 14px;
+            background: white;
+            color: #1e293b;
+            outline: none;
+        }
+        
+        select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .form-actions {
+            margin-top: 22px;
+        }
+        
+        button {
+            padding: 11px 20px;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        
+        .primary-btn {
+            background: #2563eb;
+            color: white;
+        }
+        
+        .primary-btn:hover {
+            background: #1d4ed8;
+        }
+        
+        .secondary-btn {
+            background: white;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+        }
+        
+        .secondary-btn:hover {
+            background: #f1f5f9;
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .message {
+            display: none;
+            padding: 12px 15px;
+            border-radius: 7px;
+            margin-top: 18px;
+            font-size: 14px;
+        }
+        
+        .success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .note {
+            margin-top: 18px;
+            color: #64748b;
+            font-size: 13px;
+        }
+        
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+        
+        .table-header h3 {
+            margin: 0 0 6px;
+            color: #172554;
+        }
+        
+        .table-header p {
+            margin: 0;
+            color: #64748b;
+            font-size: 13px;
+        }
+        
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            min-width: 850px;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        
+        th,
+        td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        th {
+            background: #eff6ff;
+            color: #1e3a8a;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        
+        tbody tr:nth-child(even) {
+            background: #f8fafc;
+        }
+        
+        tbody tr:hover {
+            background: #eff6ff;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: #dbeafe;
+            color: #1d4ed8;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+        
+        @media (max-width: 650px) {
+            .layout {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                padding: 15px;
+            }
+            .logo {
+                padding-bottom: 15px;
+            }
+            .sidebar a {
+                display: inline-block;
+                margin: 3px;
+                padding: 10px;
+            }
+            .topbar {
+                padding: 15px;
+            }
+            .content {
+                padding: 15px;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .card {
+                padding: 18px;
+            }
+            .table-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <aside class="sidebar">
+
+            <div class="logo">Recruitment<br>Placement System</div>
+
+            <a href="dashboard.html">Dashboard</a>
+            <a href="candidates.html">Candidates</a>
+            <a href="companies.html">Companies</a>
+            <a href="jobs.html">Jobs</a>
+            <a href="applications.html" class="active">Applications</a>
+            <a href="interviews.html">Interviews</a>
+            <a href="offers.html">Offers</a>
+            <a href="placements.html">Placements</a>
+            <a href="feedback.html">Interview Feedback</a>
+            <a href="eligibility.html">Eligibility</a>
+            <a href="reports.html">Reports</a>
+            <a href="index.html">Logout</a>
+
+        </aside>
+
+        <main class="main">
+
+            <header class="topbar">
+                <h3>Application Management</h3>
+                <span class="admin">Administrator</span>
+            </header>
+
+            <div class="content">
+
+                <div class="page-heading">
+                    <h2>Application Management</h2>
+                    <p>Submit and manage candidate applications for available job openings.</p>
+                </div>
+
+                <!-- Add Application -->
+                <section class="card">
+
+                    <div class="card-heading">
+                        <h3>Add New Application</h3>
+                        <p>Select a candidate and the job for which they are applying.</p>
+                    </div>
+
+                    <form id="applicationForm" onsubmit="addApplication(event)">
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label for="candidateId">Select Candidate *</label>
+                                <select id="candidateId" required>
+                                <option value="">Loading candidates...</option>
+                            </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="jobId">Select Job *</label>
+                                <select id="jobId" required>
+                                <option value="">Loading jobs...</option>
+                            </select>
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="primary-btn" id="submitBtn">
+                            Submit Application
+                        </button>
+                        </div>
+
+                    </form>
+
+                    <div id="message" class="message" role="status"></div>
+
+                    <p class="note">
+                        Application records are stored in the MySQL database.
+                    </p>
+
+                </section>
+
+                <!-- Applications Table -->
+                <section class="card">
+
+                    <div class="table-header">
+                        <div>
+                            <h3>All Applications</h3>
+                            <p>View candidate applications and their current status.</p>
+                        </div>
+
+                        <button type="button" class="secondary-btn" onclick="loadApplications()">
+                        Refresh Records
+                    </button>
+                    </div>
+
+                    <div class="table-container">
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Application ID</th>
+                                    <th>Candidate Name</th>
+                                    <th>Job Title</th>
+                                    <th>Application Date</th>
+                                    <th>Eligibility</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="applicationTable">
+                                <tr>
+                                    <td colspan="6">Loading applications...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+            <footer class="footer">
+                Recruitment Placement System | Application Management
+            </footer>
+
+        </main>
+
+    </div>
+
+    <script>
+        let candidates = [];
+        let jobs = [];
+
+        function showMessage(message, type) {
+            const box = document.getElementById("message");
+            box.textContent = message;
+            box.className = "message " + type;
+        }
+
+        // Load candidates from database
+        async function loadCandidates() {
+
+            try {
+
+                const response = await fetch("/api/candidates");
+
+                if (!response.ok) {
+                    throw new Error("Unable to load candidates");
+                }
+
+                candidates = await response.json();
+
+                const dropdown = document.getElementById("candidateId");
+
+                dropdown.innerHTML = '<option value="">Select Candidate</option>';
+
+                candidates.forEach(candidate => {
+
+                    const option = document.createElement("option");
+
+                    option.value = candidate.candidateId;
+                    option.textContent =
+                        candidate.name + " (ID: " +
+                        candidate.candidateId + ")";
+
+                    dropdown.appendChild(option);
+
+                });
+
+            } catch (error) {
+
+                document.getElementById("candidateId").innerHTML =
+                    '<option value="">Unable to load candidates</option>';
+
+                console.error(error);
+            }
+        }
+
+        // Load jobs from database
+        async function loadJobs() {
+
+            try {
+
+                const response = await fetch("/api/jobs");
+
+                if (!response.ok) {
+                    throw new Error("Unable to load jobs");
+                }
+
+                jobs = await response.json();
+
+                const dropdown = document.getElementById("jobId");
+
+                dropdown.innerHTML = '<option value="">Select Job</option>';
+
+                jobs.forEach(job => {
+
+                    const option = document.createElement("option");
+
+                    option.value = job.jobId;
+                    option.textContent =
+                        job.jobTitle + " (ID: " + job.jobId + ")";
+
+                    dropdown.appendChild(option);
+
+                });
+
+            } catch (error) {
+
+                document.getElementById("jobId").innerHTML =
+                    '<option value="">Unable to load jobs</option>';
+
+                console.error(error);
+            }
+        }
+
+        // Load all applications
+        async function loadApplications() {
+
+            const table = document.getElementById("applicationTable");
+
+            try {
+
+                const response = await fetch("/api/applications");
+
+                if (!response.ok) {
+                    throw new Error("Unable to load applications");
+                }
+
+                const applications = await response.json();
+
+                table.innerHTML = "";
+
+                if (applications.length === 0) {
+
+                    table.innerHTML =
+                        '<tr><td colspan="6">No applications found.</td></tr>';
+
+                    return;
+                }
+
+                applications.forEach(application => {
+
+                    const candidate = candidates.find(
+                        c => c.candidateId === application.candidateId
+                    );
+
+                    const job = jobs.find(
+                        j => j.jobId === application.jobId
+                    );
+
+                    const row = document.createElement("tr");
+
+                    const values = [
+                        application.applicationId,
+                        candidate ? candidate.name : "Candidate not found",
+                        job ? job.jobTitle : "Job not found",
+                        application.applicationDate,
+                        application.eligibilityStatus
+                    ];
+
+                    values.forEach(value => {
+
+                        const cell = document.createElement("td");
+
+                        cell.textContent = value == null ? "" : value;
+
+                        row.appendChild(cell);
+
+                    });
+
+                    const statusCell = document.createElement("td");
+                    const badge = document.createElement("span");
+
+                    badge.className = "status";
+                    badge.textContent = application.applicationStatus == null ?
+                        "" :
+                        application.applicationStatus;
+
+                    statusCell.appendChild(badge);
+                    row.appendChild(statusCell);
+
+                    table.appendChild(row);
+
+                });
+
+            } catch (error) {
+
+                table.innerHTML =
+                    '<tr><td colspan="6">Error loading applications.</td></tr>';
+
+                console.error(error);
+            }
+        }
+
+        // Add new application
+        async function addApplication(event) {
+
+            event.preventDefault();
+
+            const candidateId =
+                document.getElementById("candidateId").value;
+
+            const jobId =
+                document.getElementById("jobId").value;
+
+            const formData = new URLSearchParams();
+
+            formData.append("candidateId", candidateId);
+            formData.append("jobId", jobId);
+
+            const submitBtn = document.getElementById("submitBtn");
+
+            try {
+
+                submitBtn.disabled = true;
+                submitBtn.textContent = "Submitting...";
+
+                const response = await fetch("/api/applications", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+
+                    body: formData.toString()
+
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+
+                    showMessage(
+                        "Application submitted successfully!",
+                        "success"
+                    );
+
+                    document.getElementById("applicationForm").reset();
+
+                    await loadApplications();
+
+                } else {
+
+                    showMessage(
+                        result.message || "Unable to submit application.",
+                        "error"
+                    );
+
+                }
+
+            } catch (error) {
+
+                showMessage(
+                    "Server connection failed. Please try again.",
+                    "error"
+                );
+
+                console.error(error);
+
+            } finally {
+
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Submit Application";
+
+            }
+        }
+
+        // Load everything when page opens
+        async function initializePage() {
+
+            await Promise.all([
+                loadCandidates(),
+                loadJobs()
+            ]);
+
+            await loadApplications();
+        }
+
+        initializePage();
+    </script>
+
+</body>
+
+</html>

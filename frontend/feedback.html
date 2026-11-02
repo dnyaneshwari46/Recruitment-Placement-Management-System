@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Feedback | Recruitment Placement System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+        /* Sidebar */
+        
+        .sidebar {
+            width: 245px;
+            background: #172554;
+            color: white;
+            padding: 24px 16px;
+            flex-shrink: 0;
+        }
+        
+        .brand {
+            font-size: 19px;
+            font-weight: bold;
+            line-height: 1.5;
+            padding: 0 10px 25px;
+            border-bottom: 1px solid #33446f;
+        }
+        
+        .brand span {
+            display: block;
+            font-size: 12px;
+            color: #bfdbfe;
+            font-weight: normal;
+        }
+        
+        .nav-title {
+            margin: 25px 10px 10px;
+            color: #94a3b8;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+        
+        .nav a {
+            display: block;
+            color: #dbeafe;
+            text-decoration: none;
+            padding: 12px 14px;
+            margin: 5px 0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .nav a:hover {
+            background: #263b63;
+        }
+        
+        .nav a.active {
+            background: #2563eb;
+            color: white;
+        }
+        
+        .logout {
+            display: block;
+            margin: 30px 5px 0;
+            padding: 12px;
+            text-align: center;
+            background: #263b63;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+        /* Main content */
+        
+        .main {
+            flex: 1;
+            min-width: 0;
+            padding: 28px;
+        }
+        
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .topbar h1 {
+            margin: 0;
+            font-size: 25px;
+            color: #172554;
+        }
+        
+        .user-info {
+            color: #64748b;
+            font-size: 13px;
+        }
+        
+        .breadcrumb {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #64748b;
+        }
+        
+        .card {
+            background: white;
+            padding: 24px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 5px rgba(15, 23, 42, 0.04);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .card-header h2 {
+            margin: 0;
+            font-size: 19px;
+            color: #172554;
+        }
+        
+        .card-header p {
+            color: #64748b;
+            font-size: 13px;
+            margin: 6px 0 0;
+        }
+        /* Form */
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px 22px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+        
+        label {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #334155;
+        }
+        
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+            background: white;
+            color: #1e293b;
+        }
+        
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        textarea {
+            resize: vertical;
+        }
+        
+        .helper {
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 6px;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 22px;
+        }
+        
+        button {
+            border: none;
+            border-radius: 6px;
+            padding: 11px 18px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .primary-btn {
+            background: #2563eb;
+            color: white;
+        }
+        
+        .primary-btn:hover {
+            background: #1d4ed8;
+        }
+        
+        .secondary-btn {
+            background: white;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+        }
+        
+        button:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+        
+        .message {
+            display: none;
+            padding: 12px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-top: 18px;
+        }
+        
+        .message.success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .message.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .message.info {
+            display: block;
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        /* Table */
+        
+        .table-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .table-toolbar p {
+            color: #64748b;
+            font-size: 13px;
+            margin: 0;
+        }
+        
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 950px;
+        }
+        
+        th,
+        td {
+            padding: 13px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 13px;
+        }
+        
+        th {
+            background: #f1f5f9;
+            color: #475569;
+            font-weight: bold;
+        }
+        
+        tbody tr:nth-child(even) {
+            background: #f8fafc;
+        }
+        
+        tbody tr:hover {
+            background: #eff6ff;
+        }
+        
+        .rating {
+            font-weight: bold;
+            color: #1d4ed8;
+        }
+        
+        .empty {
+            text-align: center;
+            color: #64748b;
+            padding: 25px;
+        }
+        
+        .footer {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+            padding: 15px;
+        }
+        
+        @media (max-width: 900px) {
+            .sidebar {
+                width: 200px;
+            }
+            .main {
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 650px) {
+            .layout {
+                display: block;
+            }
+            .sidebar {
+                width: 100%;
+                padding: 15px;
+            }
+            .nav {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+            .nav-title {
+                margin-top: 15px;
+            }
+            .nav a {
+                padding: 9px;
+                font-size: 12px;
+            }
+            .logout {
+                margin-top: 15px;
+            }
+            .main {
+                padding: 15px;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-group.full {
+                grid-column: auto;
+            }
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+            .card {
+                padding: 17px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <aside class="sidebar">
+
+            <div class="brand">
+                RPMS
+                <span>Recruitment & Placement System</span>
+            </div>
+
+            <div class="nav-title">Main Menu</div>
+
+            <nav class="nav">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="candidates.html">Candidates</a>
+                <a href="companies.html">Companies</a>
+                <a href="jobs.html">Jobs</a>
+                <a href="applications.html">Applications</a>
+                <a href="interviews.html">Interviews</a>
+                <a href="offers.html">Offers</a>
+                <a href="placements.html">Placements</a>
+                <a href="feedback.html" class="active">Interview Feedback</a>
+                <a href="eligibility.html">Eligibility</a>
+                <a href="reports.html">Reports</a>
+            </nav>
+
+            <a href="index.html" class="logout">Logout</a>
+
+        </aside>
+
+        <main class="main">
+
+            <div class="topbar">
+                <div>
+                    <h1>Interview Feedback</h1>
+                    <div class="breadcrumb">
+                        Dashboard / Interview Feedback
+                    </div>
+                </div>
+
+                <div class="user-info">
+                    Administrator
+                </div>
+            </div>
+
+            <!-- Feedback Form -->
+            <section class="card">
+
+                <div class="card-header">
+                    <div>
+                        <h2>Submit Interview Feedback</h2>
+                        <p>Enter interview ratings and the interviewer's recommendation.</p>
+                    </div>
+                </div>
+
+                <form id="feedbackForm">
+
+                    <div class="form-grid">
+
+                        <div class="form-group full">
+                            <label for="interviewId">Interview *</label>
+                            <select id="interviewId" required>
+                            <option value="">Loading interviews...</option>
+                        </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="submittedBy">Submitted By (User ID) *</label>
+                            <select id="submittedBy" required>
+                            <option value="">Select User</option>
+                            <option value="1">User 1</option>
+                            <option value="2">User 2</option>
+                            <option value="3">User 3</option>
+                            <option value="4">User 4</option>
+                            <option value="5">User 5</option>
+                        </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="recommendation">Recommendation *</label>
+                            <select id="recommendation" required>
+                            <option value="">Select Recommendation</option>
+                            <option value="selected">Selected</option>
+                            <option value="rejected">Rejected</option>
+                            <option value="on_hold">On Hold</option>
+                        </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="technicalRating">Technical Rating (0–5) *</label>
+                            <input type="number" id="technicalRating" min="0" max="5" step="0.1" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="communicationRating">Communication Rating (0–5) *</label>
+                            <input type="number" id="communicationRating" min="0" max="5" step="0.1" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="problemSolvingRating">Problem Solving Rating (0–5) *</label>
+                            <input type="number" id="problemSolvingRating" min="0" max="5" step="0.1" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="overallRating">Overall Rating (0–5) *</label>
+                            <input type="number" id="overallRating" min="0" max="5" step="0.1" required>
+                        </div>
+
+                        <div class="form-group full">
+                            <label for="remarks">Remarks</label>
+                            <textarea id="remarks" rows="4" placeholder="Enter interview feedback and observations"></textarea>
+                            <span class="helper">Add comments about the candidate's performance.</span>
+                        </div>
+
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" id="submitButton" class="primary-btn">
+                        Submit Feedback
+                    </button>
+
+                        <button type="reset" class="secondary-btn">
+                        Clear Form
+                    </button>
+                    </div>
+
+                </form>
+
+                <div id="message" class="message"></div>
+
+            </section>
+
+            <!-- Feedback Table -->
+            <section class="card">
+
+                <div class="card-header">
+                    <div>
+                        <h2>Submitted Feedback Records</h2>
+                        <p>View previously submitted interview feedback.</p>
+                    </div>
+                </div>
+
+                <div class="table-toolbar">
+                    <p id="recordCount">Loading records...</p>
+
+                    <button type="button" class="secondary-btn" onclick="loadFeedback()">
+                    Refresh
+                </button>
+                </div>
+
+                <div class="table-container">
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Feedback ID</th>
+                                <th>Interview ID</th>
+                                <th>Technical</th>
+                                <th>Communication</th>
+                                <th>Problem Solving</th>
+                                <th>Overall</th>
+                                <th>Recommendation</th>
+                                <th>Remarks</th>
+                                <th>Submitted By</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="feedbackTable">
+                            <tr>
+                                <td colspan="9" class="empty">
+                                    Loading feedback...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </section>
+
+            <div class="footer">
+                Recruitment & Placement Management System
+            </div>
+
+        </main>
+
+    </div>
+
+    <script>
+        function showMessage(text, type) {
+
+            const message = document.getElementById("message");
+
+            message.textContent = text;
+            message.className = "message " + type;
+        }
+
+        // Load interviews and exclude interviews that already have feedback
+        async function loadInterviews() {
+
+            const dropdown = document.getElementById("interviewId");
+
+            try {
+
+                const interviewResponse = await fetch("/api/interviews");
+
+                if (!interviewResponse.ok) {
+                    throw new Error("Unable to load interviews.");
+                }
+
+                const interviews = await interviewResponse.json();
+
+                const feedbackResponse = await fetch("/api/feedback");
+
+                if (!feedbackResponse.ok) {
+                    throw new Error("Unable to check existing feedback.");
+                }
+
+                const feedbackList = await feedbackResponse.json();
+
+                const usedInterviewIds = feedbackList.map(function(f) {
+                    return Number(f.interviewId);
+                });
+
+                dropdown.innerHTML =
+                    '<option value="">Select Interview</option>';
+
+                interviews.forEach(function(interview) {
+
+                    const id = Number(interview.interviewId);
+
+                    if (usedInterviewIds.includes(id)) {
+                        return;
+                    }
+
+                    const option = document.createElement("option");
+
+                    option.value = id;
+
+                    option.textContent =
+                        "Interview " + id +
+                        " - Application " + interview.applicationId +
+                        " - Round " + interview.roundNumber +
+                        " - " + interview.roundType;
+
+                    dropdown.appendChild(option);
+                });
+
+                if (dropdown.options.length === 1) {
+
+                    dropdown.innerHTML =
+                        '<option value="">No interviews available for feedback</option>';
+                }
+
+            } catch (error) {
+
+                dropdown.innerHTML =
+                    '<option value="">Unable to load interviews</option>';
+
+                showMessage(error.message, "error");
+            }
+        }
+
+        // Load submitted feedback
+        async function loadFeedback() {
+
+            const table = document.getElementById("feedbackTable");
+            const count = document.getElementById("recordCount");
+
+            try {
+
+                const response = await fetch("/api/feedback");
+
+                if (!response.ok) {
+                    throw new Error("Unable to load feedback.");
+                }
+
+                const feedbackList = await response.json();
+
+                table.innerHTML = "";
+
+                count.textContent =
+                    "Total feedback records: " + feedbackList.length;
+
+                if (feedbackList.length === 0) {
+
+                    table.innerHTML =
+                        '<tr><td colspan="9" class="empty">No feedback records found.</td></tr>';
+
+                    return;
+                }
+
+                feedbackList.forEach(function(f) {
+
+                    const row = document.createElement("tr");
+
+                    const values = [
+                        f.feedbackId,
+                        f.interviewId,
+                        f.technicalRating,
+                        f.communicationRating,
+                        f.problemSolvingRating,
+                        f.overallRating,
+                        f.recommendation,
+                        f.remarks,
+                        f.submittedBy
+                    ];
+
+                    values.forEach(function(value, index) {
+
+                        const cell = document.createElement("td");
+
+                        cell.textContent =
+                            (value === null || value === undefined) ? "" : value;
+
+                        if (index >= 2 && index <= 5) {
+                            cell.className = "rating";
+                        }
+
+                        row.appendChild(cell);
+                    });
+
+                    table.appendChild(row);
+                });
+
+            } catch (error) {
+
+                table.innerHTML =
+                    '<tr><td colspan="9" class="empty">Error loading feedback.</td></tr>';
+
+                count.textContent = "Unable to load records.";
+
+                showMessage(error.message, "error");
+            }
+        }
+
+        // Submit feedback
+        document.getElementById("feedbackForm")
+            .addEventListener("submit", async function(event) {
+
+                event.preventDefault();
+
+                const button = document.getElementById("submitButton");
+
+                const interviewId =
+                    document.getElementById("interviewId").value;
+
+                const submittedBy =
+                    document.getElementById("submittedBy").value;
+
+                const technicalRating =
+                    document.getElementById("technicalRating").value;
+
+                const communicationRating =
+                    document.getElementById("communicationRating").value;
+
+                const problemSolvingRating =
+                    document.getElementById("problemSolvingRating").value;
+
+                const overallRating =
+                    document.getElementById("overallRating").value;
+
+                const recommendation =
+                    document.getElementById("recommendation").value.trim();
+
+                const remarks =
+                    document.getElementById("remarks").value;
+
+                if (!interviewId || !submittedBy || !recommendation) {
+
+                    showMessage("Please fill all required fields.", "error");
+                    return;
+                }
+
+                const ratings = [
+                    Number(technicalRating),
+                    Number(communicationRating),
+                    Number(problemSolvingRating),
+                    Number(overallRating)
+                ];
+
+                for (let i = 0; i < ratings.length; i++) {
+
+                    if (!Number.isFinite(ratings[i]) ||
+                        ratings[i] < 0 ||
+                        ratings[i] > 5) {
+
+                        showMessage(
+                            "All ratings must be between 0 and 5.",
+                            "error"
+                        );
+
+                        return;
+                    }
+                }
+
+                const feedback = {
+                    interviewId: interviewId,
+                    submittedBy: submittedBy,
+                    technicalRating: technicalRating,
+                    communicationRating: communicationRating,
+                    problemSolvingRating: problemSolvingRating,
+                    overallRating: overallRating,
+                    recommendation: recommendation,
+                    remarks: remarks
+                };
+
+                button.disabled = true;
+
+                showMessage("Submitting feedback...", "info");
+
+                try {
+
+                    const response = await fetch("/api/feedback", {
+
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+
+                        body: new URLSearchParams(feedback)
+                    });
+
+                    const result = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(
+                            result.message || "Feedback submission failed."
+                        );
+                    }
+
+                    showMessage(
+                        "Interview feedback submitted successfully!",
+                        "success"
+                    );
+
+                    document.getElementById("feedbackForm").reset();
+
+                    await loadFeedback();
+                    await loadInterviews();
+
+                } catch (error) {
+
+                    showMessage(error.message, "error");
+
+                } finally {
+
+                    button.disabled = false;
+                }
+            });
+
+        // Load data when page opens
+        loadInterviews();
+        loadFeedback();
+    </script>
+
+</body>
+
+</html>

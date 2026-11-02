@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offer Management | Recruitment Placement System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            background: #f4f7fb;
+            color: #1e293b;
+        }
+        
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+        /* Sidebar */
+        
+        .sidebar {
+            width: 245px;
+            background: #172554;
+            color: white;
+            padding: 25px 15px;
+            flex-shrink: 0;
+        }
+        
+        .brand {
+            font-size: 19px;
+            font-weight: bold;
+            padding: 5px 10px 25px;
+            line-height: 1.5;
+        }
+        
+        .brand span {
+            display: block;
+            color: #93c5fd;
+            font-size: 12px;
+            font-weight: normal;
+        }
+        
+        .nav a {
+            display: block;
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 12px 14px;
+            margin: 5px 0;
+            border-radius: 7px;
+            font-size: 14px;
+        }
+        
+        .nav a:hover,
+        .nav a.active {
+            background: #2563eb;
+            color: white;
+        }
+        /* Main content */
+        
+        .main {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .topbar {
+            height: 70px;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .topbar h3 {
+            margin: 0;
+            color: #172554;
+        }
+        
+        .admin {
+            background: #eff6ff;
+            color: #1d4ed8;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+        
+        .content {
+            padding: 30px;
+            max-width: 1400px;
+            margin: auto;
+        }
+        
+        .page-heading {
+            margin-bottom: 25px;
+        }
+        
+        .page-heading h1 {
+            margin: 0 0 8px;
+            color: #172554;
+            font-size: 27px;
+        }
+        
+        .page-heading p {
+            margin: 0;
+            color: #64748b;
+            font-size: 14px;
+        }
+        
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+        }
+        
+        .card-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .card-heading h2 {
+            margin: 0;
+            color: #172554;
+            font-size: 19px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px 22px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: bold;
+            color: #334155;
+        }
+        
+        input,
+        select {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            background: white;
+            font-size: 14px;
+            outline: none;
+        }
+        
+        input:focus,
+        select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .actions {
+            margin-top: 22px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            border: none;
+            border-radius: 6px;
+            padding: 11px 18px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .primary-btn {
+            background: #2563eb;
+            color: white;
+        }
+        
+        .primary-btn:hover:not(:disabled) {
+            background: #1d4ed8;
+        }
+        
+        .secondary-btn {
+            background: white;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+        }
+        
+        .secondary-btn:hover {
+            background: #f1f5f9;
+        }
+        
+        .message {
+            display: none;
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .message.success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .message.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
+        }
+        
+        th,
+        td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+        
+        th {
+            background: #f1f5f9;
+            color: #334155;
+            font-weight: bold;
+        }
+        
+        tbody tr:nth-child(even) {
+            background: #fafcff;
+        }
+        
+        tbody tr:hover {
+            background: #eff6ff;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-accepted {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .empty {
+            text-align: center;
+            color: #64748b;
+            padding: 25px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+            font-size: 12px;
+        }
+        
+        @media (max-width: 800px) {
+            .sidebar {
+                width: 190px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .layout {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                padding: 15px;
+            }
+            .brand {
+                padding-bottom: 12px;
+            }
+            .nav {
+                display: flex;
+                overflow-x: auto;
+                gap: 5px;
+            }
+            .nav a {
+                white-space: nowrap;
+                margin: 0;
+            }
+            .topbar {
+                padding: 0 15px;
+            }
+            .content {
+                padding: 15px;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .card {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <aside class="sidebar">
+
+            <div class="brand">
+                RPMS
+                <span>Recruitment Placement System</span>
+            </div>
+
+            <nav class="nav">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="candidates.html">Candidates</a>
+                <a href="companies.html">Companies</a>
+                <a href="jobs.html">Jobs</a>
+                <a href="applications.html">Applications</a>
+                <a href="interviews.html">Interviews</a>
+                <a href="offers.html" class="active">Offers</a>
+                <a href="placements.html">Placements</a>
+                <a href="feedback.html">Feedback</a>
+                <a href="eligibility.html">Eligibility</a>
+                <a href="reports.html">Reports</a>
+                <a href="index.html" onclick="logout()">Logout</a>
+            </nav>
+
+        </aside>
+
+        <main class="main">
+
+            <header class="topbar">
+                <h3>Offer Management</h3>
+                <span class="admin">Administrator</span>
+            </header>
+
+            <div class="content">
+
+                <div class="page-heading">
+                    <h1>Offer Management</h1>
+                    <p>Dashboard / Offers / Manage Job Offers</p>
+                </div>
+
+                <section class="card">
+
+                    <div class="card-heading">
+                        <h2>Create Job Offer</h2>
+                    </div>
+
+                    <form id="offerForm">
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label for="applicationId">Application ID</label>
+                                <select id="applicationId" required>
+                                <option value="">Select Application</option>
+                            </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="designation">Designation</label>
+                                <input type="text" id="designation" placeholder="Enter designation" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="package">Offered Package (LPA)</label>
+                                <input type="number" id="package" step="0.01" min="0.01" placeholder="Enter package" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="offerDate">Offer Date</label>
+                                <input type="date" id="offerDate" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="joiningDate">Expected Joining Date</label>
+                                <input type="date" id="joiningDate" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="offerStatus">Offer Status</label>
+                                <select id="offerStatus" required>
+                                <option value="PENDING">Pending</option>
+                                <option value="ACCEPTED">Accepted</option>
+                                <option value="REJECTED">Rejected</option>
+                            </select>
+                            </div>
+
+                        </div>
+
+                        <div class="actions">
+                            <button type="submit" class="primary-btn" id="submitBtn">
+                            Create Offer
+                        </button>
+
+                            <button type="reset" class="secondary-btn">
+                            Clear Form
+                        </button>
+                        </div>
+
+                    </form>
+
+                    <p id="message" class="message"></p>
+
+                </section>
+
+                <section class="card">
+
+                    <div class="card-heading">
+                        <h2>All Offers</h2>
+
+                        <button type="button" class="secondary-btn" onclick="loadOffers()">
+                        Refresh
+                    </button>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Offer ID</th>
+                                    <th>Application ID</th>
+                                    <th>Designation</th>
+                                    <th>Package (LPA)</th>
+                                    <th>Offer Date</th>
+                                    <th>Joining Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="offerTable">
+                                <tr>
+                                    <td colspan="7" class="empty">Loading offers...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </section>
+
+            </div>
+
+            <footer>
+                Recruitment and Placement Management System
+            </footer>
+
+        </main>
+
+    </div>
+
+    <script>
+        function logout() {
+            sessionStorage.clear();
+        }
+
+        function showMessage(message, type) {
+            const messageBox = document.getElementById("message");
+            messageBox.textContent = message;
+            messageBox.className = "message " + type;
+        }
+
+        // Load application IDs
+        async function loadApplications() {
+
+            const dropdown = document.getElementById("applicationId");
+
+            try {
+
+                const response = await fetch("/api/applications");
+
+                if (!response.ok) {
+                    throw new Error("Unable to load applications");
+                }
+
+                const applications = await response.json();
+
+                dropdown.innerHTML =
+                    '<option value="">Select Application</option>';
+
+                applications.forEach(application => {
+
+                    const option = document.createElement("option");
+
+                    option.value = application.applicationId;
+                    option.textContent =
+                        "Application " + application.applicationId;
+
+                    dropdown.appendChild(option);
+
+                });
+
+            } catch (error) {
+
+                showMessage("Error loading applications: " + error.message, "error");
+
+            }
+        }
+
+
+        // Load all offers
+        async function loadOffers() {
+
+            const table = document.getElementById("offerTable");
+
+            table.innerHTML =
+                '<tr><td colspan="7" class="empty">Loading offers...</td></tr>';
+
+            try {
+
+                const response = await fetch("/api/offers");
+
+                if (!response.ok) {
+                    throw new Error("Unable to load offers");
+                }
+
+                const offers = await response.json();
+
+                table.innerHTML = "";
+
+                if (offers.length === 0) {
+
+                    const row = document.createElement("tr");
+                    const cell = document.createElement("td");
+
+                    cell.colSpan = 7;
+                    cell.className = "empty";
+                    cell.textContent = "No offers available.";
+
+                    row.appendChild(cell);
+                    table.appendChild(row);
+
+                    return;
+                }
+
+                offers.forEach(offer => {
+
+                    const row = document.createElement("tr");
+
+                    const values = [
+                        offer.offerId,
+                        offer.applicationId,
+                        offer.designation,
+                        offer.packageAmount,
+                        offer.offerDate,
+                        offer.joiningDate
+                    ];
+
+                    values.forEach(value => {
+
+                        const cell = document.createElement("td");
+
+                        cell.textContent =
+                            (value === null || value === undefined) ? "" : value;
+
+                        row.appendChild(cell);
+
+                    });
+
+                    const statusCell = document.createElement("td");
+                    const statusBadge = document.createElement("span");
+
+                    const status = offer.offerStatus || "";
+
+                    statusBadge.textContent = status;
+                    statusBadge.className = "status";
+
+                    if (status === "ACCEPTED") {
+                        statusBadge.classList.add("status-accepted");
+                    } else if (status === "REJECTED") {
+                        statusBadge.classList.add("status-rejected");
+                    } else {
+                        statusBadge.classList.add("status-pending");
+                    }
+
+                    statusCell.appendChild(statusBadge);
+                    row.appendChild(statusCell);
+
+                    table.appendChild(row);
+
+                });
+
+            } catch (error) {
+
+                table.innerHTML =
+                    '<tr><td colspan="7" class="empty">Unable to load offers.</td></tr>';
+
+                showMessage("Error loading offers: " + error.message, "error");
+
+            }
+        }
+
+
+        // Create a new offer
+        document.getElementById("offerForm")
+            .addEventListener("submit", async function(event) {
+
+                event.preventDefault();
+
+                const submitButton = document.getElementById("submitBtn");
+
+                const data = new URLSearchParams();
+
+                data.append(
+                    "applicationId",
+                    document.getElementById("applicationId").value
+                );
+
+                data.append(
+                    "designation",
+                    document.getElementById("designation").value
+                );
+
+                data.append(
+                    "packageAmount",
+                    document.getElementById("package").value
+                );
+
+                data.append(
+                    "offerDate",
+                    document.getElementById("offerDate").value
+                );
+
+                data.append(
+                    "joiningDate",
+                    document.getElementById("joiningDate").value
+                );
+
+                data.append(
+                    "offerStatus",
+                    document.getElementById("offerStatus").value
+                );
+
+                try {
+
+                    submitButton.disabled = true;
+                    submitButton.textContent = "Creating...";
+
+                    const response = await fetch("/api/offers", {
+
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+
+                        body: data
+
+                    });
+
+                    const result = await response.text();
+
+                    if (response.ok && result.toLowerCase().includes("success")) {
+
+                        showMessage("Offer created successfully!", "success");
+
+                        document.getElementById("offerForm").reset();
+
+                        await loadOffers();
+
+                    } else {
+
+                        showMessage("Unable to create offer: " + result, "error");
+
+                    }
+
+                } catch (error) {
+
+                    showMessage("Server error: " + error.message, "error");
+
+                } finally {
+
+                    submitButton.disabled = false;
+                    submitButton.textContent = "Create Offer";
+
+                }
+
+            });
+
+
+        // Load data when page opens
+        loadApplications();
+        loadOffers();
+    </script>
+
+</body>
+
+</html>
